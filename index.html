@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neil Ramnarine – 3D printing technology student | Portfolio</title>
+  <meta name="description" content="Portfolio of Neil Ramnarine, 3D printing technology student: school projects, personal projects and background.">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Neil Ramnarine">
+  <meta property="og:title" content="Neil Ramnarine – 3D printing technology student">
+  <meta property="og:description" content="Portfolio: school projects, personal projects and background in 3D printing and additive manufacturing.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="#top"><img class="brand-logo" id="brand-logo" alt=""><span id="brand-name"></span></a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav" id="nav">
+        <a href="#about">About</a>
+        <a href="#school">School Projects</a>
+        <a href="#personal">Personal Projects</a>
+        <a href="#contact" class="nav-cta" id="nav-cta">Contact ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <noscript>
+      <p class="noscript-note">Neil Ramnarine – 3D printing technology student at Xenter YH, previously an electrical power engineer. This page needs JavaScript to show projects, the CV and the contact form. LinkedIn: <a href="https://www.linkedin.com/in/neilvj">linkedin.com/in/neilvj</a></p>
+    </noscript>
+    <section class="hero">
+      <div class="hero-bgword" id="bgword" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <div class="stats" id="stats"></div>
+          <h1 class="hero-hello" id="hello"></h1>
+          <p class="hero-role" id="role"></p>
+          <p class="hero-sub" id="subtitle"></p>
+          <div class="hero-actions" id="hero-actions">
+            <a class="btn btn--dark" href="#school">See my work</a>
+            <a class="btn btn--line" href="#about">About me</a>
+          </div>
+        </div>
+        <div class="hero-image" id="hero-image"></div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">About</span>
+          <h2>About me</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-left">
+            <div class="about-photo" id="about-photo"></div>
+            <div class="about-text" id="about-text"></div>
+          </div>
+          <div id="timelines"></div>
+        </div>
+        <div class="about-banner" id="about-banner"></div>
+      </div>
+    </section>
+
+    <section class="section section--soft" id="school">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Xenter YH</span>
+          <h2>School Projects</h2>
+          <p>Course work, experiments and reports.</p>
+        </div>
+        <div class="grid" id="school-grid"></div>
+      </div>
+    </section>
+
+    <section class="section" id="personal">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">On my own time</span>
+          <h2>Personal Projects</h2>
+          <p>Things I design and print for myself.</p>
+        </div>
+        <div class="grid" id="personal-grid"></div>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="container">
+        <h2 id="band-title"></h2>
+        <p id="band-text"></p>
+        <a class="btn" id="band-btn" href="#contact"></a>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Contact</span>
+          <h2>Let's talk</h2>
+        </div>
+        <div class="contact-list" id="contact-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container" id="footer-text"></div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

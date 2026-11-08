@@ -1,0 +1,101 @@
+/* =====================================================================
+   MASTER LIST  -  change colors, sizes and positions HERE only.
+   Everything on the site reads these values. Save, refresh, done.
+   ===================================================================== */
+
+:root {
+
+  /* ---------- 1. COLORS ---------- */
+  --color-text:        #222222;   /* main text and headings            */
+  --color-text-soft:   #555555;   /* paragraphs, small grey text (was #7B7B7B, now WCAG AAA) */
+  --color-bg:          #FFFFFF;   /* page background                   */
+  --color-bg-soft:     #F8F8F8;   /* alternate sections, cards         */
+  --color-dark:        #222222;   /* dark band, buttons                */
+  --color-on-dark:     #FFFFFF;   /* text on dark band / buttons       */
+  --color-line:        #E6E6E6;   /* thin divider lines                */
+  --color-tag-bg:      #EFEFEF;   /* small tag pills                   */
+
+  /* ---------- 2. FONT ---------- */
+  --font-main: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
+  --weight-heading: 400;          /* 300 = thinner, 500 = bolder       */
+  --weight-body: 400;
+
+  /* ---------- 3. TEXT SIZES (desktop) ---------- */
+  --size-hero:   clamp(4rem, 11vw, 9rem);    /* big "Hello" word        */
+  --size-h2:     clamp(2.2rem, 4.5vw, 3.6rem); /* section headings      */
+  --size-h3:     1.35rem;                    /* card titles, job titles */
+  --size-body:   1.05rem;                    /* normal text             */
+  --size-small:  0.88rem;                    /* dates, tags, captions   */
+  --size-stat:   clamp(2rem, 4vw, 3rem);     /* big numbers             */
+
+  /* ---------- 4. SPACING AND SHAPE ---------- */
+  --page-width:      1200px;                 /* max content width       */
+  --page-padding:    clamp(1.25rem, 4vw, 3rem); /* left/right edge      */
+  --section-space:   clamp(4rem, 9vw, 8rem); /* gap above/below sections */
+  --radius:          16px;                   /* card corners            */
+  --radius-pill:     999px;                  /* tags and buttons        */
+  --header-height:   72px;
+
+  /* ---------- 5. HERO (top of the page) ---------- */
+  --hero-min-height:     72vh;
+  --hero-columns:        1fr 38%;            /* text column | photo column */
+  --hero-image-position: center top;         /* which part of the photo is shown */
+  --hero-image-height:   70vh;               /* photo height            */
+
+  /* ---------- 6. BIG FADED BACKGROUND WORD ---------- */
+  --bgword-size:     clamp(5rem, 15vw, 17rem);
+  --bgword-top:      50%;                    /* move up/down            */
+  --bgword-left:     50%;                    /* move left/right         */
+  --bgword-fill:         #222222;            /* inside the letters. transparent = outline only */
+  --bgword-stroke-width: 0;                  /* outline thickness. 0 = no outline */
+  --bgword-stroke-color: var(--color-text);  /* outline colour */
+  --bgword-spacing:      -0.04em;            /* space between letters (outline needs >= 0) */
+  --bgword-opacity:      0.06;               /* 0 = hidden, 1 = full. Outline: 0.15-0.4 */
+  /* For the outline-only look use: fill transparent, stroke-width 2px, spacing 0.03em, opacity 0.22 */
+
+  /* ---------- 7. PROJECT CARDS ---------- */
+  --grid-columns:     3;                     /* cards per row           */
+  --card-gap:         1.75rem;
+  --card-image-ratio: 16 / 10;               /* try 4 / 3 or 1 / 1      */
+
+  /* ---------- 8. DARK CALL-TO-ACTION BAND ---------- */
+  --band-padding: clamp(3rem, 8vw, 6rem);
+
+  /* ---------- 9. LOGO AND ABOUT PHOTO ---------- */
+  --logo-height:          30px;              /* logo size in the header */
+  --about-photo-width:    300px;             /* photo width             */
+  --about-photo-ratio:    4 / 5;             /* 1 / 1 = square          */
+  --about-photo-position: center top;        /* which part is shown     */
+
+  /* ---------- 10. TOP MENU BAR ---------- */
+  --header-bg:    var(--color-dark);         /* same dark grey as the intern band */
+  --header-text:  var(--color-on-dark);      /* menu text and hamburger lines     */
+  --header-line:  rgba(255,255,255,.14);     /* thin lines in the bar / mobile menu */
+  --logo-filter:  invert(1);                 /* white logo on dark bar. Use "none" on a light bar */
+
+  /* ---------- 11. PORTFOLIO IMAGES ---------- */
+  --card-image-filter: grayscale(1);         /* black and white until clicked. "none" = always colour */
+}
+
+/* Tablet: 2 cards per row */
+@media (max-width: 1000px) {
+  :root {
+    --grid-columns: 2;
+  }
+}
+
+/* Mobile: everything below overrides the values above on small screens */
+@media (max-width: 800px) {
+  :root {
+    --size-body:        1rem;
+    --hero-min-height:  auto;
+    --hero-columns:     1fr;                 /* photo goes under text   */
+    --hero-image-height: 50vh;
+    --grid-columns:     1;
+    --header-height:    64px;
+    --bgword-size:      17vw;
+    --bgword-top:       43%;
+    --logo-height:      26px;
+    --about-photo-width: 220px;
+  }
+}
