@@ -7,8 +7,8 @@ function esc(s) {
 }
 
 /* ---------- Hero ---------- */
-$("#brand-name").textContent = SITE.name;
 const logoEl = $("#brand-logo");
+logoEl.alt = SITE.name + " – back to top";   /* name is not shown next to the logo, but screen readers still get it */
 if (SITE.logo) logoEl.src = "images/" + SITE.logo;
 else logoEl.remove();
 $("#bgword").textContent = SITE.bgWord;
@@ -61,9 +61,8 @@ function cards(list) {
       const img = p.image ? `<img src="images/${esc(p.image)}" alt="${esc(p.title)}" loading="lazy">` : `<div class="ph"></div>`;
       const icon = p.link ? "↗" : p.video ? "▶" : p.image ? "+" : "";
       const arrow = icon ? `<span class="card-arrow">${icon}</span>` : "";
-      const badge = p.video ? `<span class="card-badge">Animation</span>` : "";
       const tags = (p.tags || []).map((t) => `<span class="tag">${esc(t)}</span>`).join("");
-      const inner = `<div class="card-img">${img}${badge}${arrow}</div><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p><div class="tags">${tags}</div>`;
+      const inner = `<div class="card-img">${img}${arrow}</div><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p><div class="tags">${tags}</div>`;
       if (p.link) return `<a class="card reveal" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>`;
       if (p.image || p.video) {
         return `<button type="button" class="card card--open reveal" data-title="${esc(p.title)}" data-image="${esc(p.image || "")}" data-video="${esc(p.video || "")}">${inner}</button>`;

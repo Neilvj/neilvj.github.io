@@ -31,8 +31,8 @@ const SITE = {
   ],
 
   about: [
-    "I moved from a long-time hobby in 3D printing to studying additive manufacturing at Xenter YH. Before that I spent five years as an electrical power engineer producing technical drawings.",
-    "I work with FDM and resin printing. I model technical parts in Autodesk Fusion and have also used FreeCAD and some Blender. My projects mix school work, design experiments and functional parts for everyday use."
+    "Hello, I'm Neil. After a long-standing hobby in 3D printing, I am now studying additive manufacturing at Xenter YH. Before that, I spent five years as an electrical power engineer producing technical drawings.",
+    "I work with FDM and resin printing, and I model technical parts in Autodesk Fusion. I have also used FreeCAD and some Blender. My projects combine school work, design experiments and functional parts for everyday use."
   ],
 
   experience: [
