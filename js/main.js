@@ -27,15 +27,43 @@ if (SITE.heroImage) {
   $(".hero-inner").classList.add("no-image");
 }
 
-/* ---------- About ---------- */
-$("#about-text").innerHTML = SITE.about.map((p) => `<p>${esc(p)}</p>`).join("");
-
-function timeline(title, items) {
-  return `<div class="timeline"><h3>${title}</h3>${items
-    .map((i) => `<div class="t-item"><div><strong>${esc(i.title)}</strong><span>${esc(i.place)}</span></div><span class="t-date">${esc(i.date)}</span></div>`)
+/* ---------- About (English / Swedish) ---------- */
+let aboutLang = "en";
+function timeline(title, items, lang) {
+  return `<div class="timeline"><h3>${esc(title)}</h3>${items
+    .map((i) => {
+      const t = (lang !== "en" && i[lang]) || {};
+      return `<div class="t-item"><div><strong>${esc(t.title || i.title)}</strong><span>${esc(i.place)}</span></div><span class="t-date">${esc(t.date || i.date)}</span></div>`;
+    })
     .join("")}</div>`;
 }
-$("#timelines").innerHTML = timeline("Experience", SITE.experience) + timeline("Education", SITE.education);
+function renderAbout(lang) {
+  aboutLang = lang;
+  const t = SITE.aboutText[lang];
+  $("#about-eyebrow").textContent = t.eyebrow;
+  $("#about-title").textContent = t.heading;
+  $("#about-text").innerHTML = t.paragraphs.map((p) => `<p>${esc(p)}</p>`).join("");
+  $("#timelines").innerHTML = timeline(t.experience, SITE.experience, lang) + timeline(t.education, SITE.education, lang);
+  ["#about-eyebrow", "#about-title", "#about-text", "#timelines"].forEach((s) => $(s).setAttribute("lang", lang));
+  document.querySelectorAll(".lang-btn").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+}
+/* ---------- Intern band (same language as About) ---------- */
+function renderBand(lang) {
+  const t = SITE.band[lang];
+  $("#band-title").textContent = t.title;
+  $("#band-lead").textContent = t.lead;
+  $("#band-points").innerHTML = t.points.map((p) => `<li><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p></li>`).join("");
+  $("#band-closing").textContent = t.closing;
+  ["#band-title", "#band-lead", "#band-points", "#band-closing"].forEach((s) => $(s).setAttribute("lang", lang));
+}
+
+/* One language for About and the intern band; both SV / EN switches stay in step */
+function setLanguage(lang) {
+  renderAbout(lang);
+  renderBand(lang);
+}
+document.querySelectorAll(".lang-btn").forEach((b) => b.addEventListener("click", () => setLanguage(b.dataset.lang)));
+setLanguage("en");
 
 const photo = $("#about-photo");
 if (SITE.aboutPhoto) {
@@ -189,14 +217,8 @@ document.addEventListener("keydown", (e) => {
 });
 
 /* ---------- Band and contact ---------- */
-$("#band-title").textContent = SITE.band.title;
-$("#band-text").textContent = SITE.band.text;
 const hasMail = !!SITE.contact.email;
-$("#band-btn").textContent = SITE.band.button;
-if (hasMail) {
-  $("#band-btn").setAttribute("data-contact", "");   // opens the message popup
-  $("#nav-cta").setAttribute("data-contact", "");
-}
+if (hasMail) $("#nav-cta").setAttribute("data-contact", "");   // opens the message popup
 
 const links = [];
 if (hasMail) links.push(`<button type="button" class="btn btn--dark" data-contact>Send me a message</button>`);

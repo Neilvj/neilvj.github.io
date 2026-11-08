@@ -30,20 +30,39 @@ const SITE = {
     { number: "5",  label: "Years as electrical power engineer" }
   ],
 
-  about: [
-    "Hello, I'm Neil. After a long-standing hobby in 3D printing, I am now studying additive manufacturing at Xenter YH. Before that, I spent five years as an electrical power engineer producing technical drawings.",
-    "I work with FDM and resin printing, and I model technical parts in Autodesk Fusion. I have also used FreeCAD and some Blender. My projects combine school work, design experiments and functional parts for everyday use."
-  ],
+  // About me text in two languages. The SV / EN switch at the bottom of the About section picks one.
+  aboutText: {
+    en: {
+      eyebrow: "About",
+      heading: "About me",
+      paragraphs: [
+        "Hello, I'm Neil. After a long-standing hobby in 3D printing, I am now studying additive manufacturing at Xenter YH. Before that, I spent five years as an electrical power engineer producing technical drawings.",
+        "I work with FDM and resin printing, and I model technical parts in Autodesk Fusion. I have also used FreeCAD and some Blender. My projects combine school work, design experiments and functional parts for everyday use."
+      ],
+      experience: "Experience",
+      education: "Education"
+    },
+    sv: {
+      eyebrow: "Profil",
+      heading: "Om mig",
+      paragraphs: [
+        "Hej, jag heter Neil. Efter många år med 3D-printing som hobby studerar jag nu additiv tillverkning på Xenter YH. Dessförinnan arbetade jag i fem år som elkraftsingenjör och tog fram tekniska ritningar.",
+        "Jag arbetar med FDM- och resinprintning och konstruerar tekniska delar i Autodesk Fusion. Jag har också använt FreeCAD och lite Blender. Mina projekt är en blandning av skolarbeten, designexperiment och funktionella delar för vardagsbruk."
+      ],
+      experience: "Erfarenhet",
+      education: "Utbildning"
+    }
+  },
 
   experience: [
-    { title: "Electrical Power Engineer", place: "Gridtec",   date: "2022 – 2025" },
-    { title: "Power Consultant, Transmission", place: "Afry AB", date: "2021" },
-    { title: "Team Leader", place: "CityMail AB", date: "2010 – 2019" }
+    { title: "Electrical Power Engineer", place: "Gridtec",   date: "2022 – 2025", sv: { title: "Elkraftsingenjör" } },
+    { title: "Power Consultant, Transmission", place: "Afry AB", date: "2021", sv: { title: "Elkraftskonsult, transmission" } },
+    { title: "Team Leader", place: "CityMail AB", date: "2010 – 2019", sv: { title: "Teamledare" } }
   ],
 
   education: [
-    { title: "3D Printing Technology", place: "Xenter", date: "2026 – ongoing" },
-    { title: "Electrical Power Engineer (YH)", place: "Stockholm Tekniska Institut", date: "2019 – 2021" },
+    { title: "3D Printing Technology", place: "Xenter", date: "2026 – ongoing", sv: { title: "3D-printteknik", date: "2026 – pågående" } },
+    { title: "Electrical Power Engineer (YH)", place: "Stockholm Tekniska Institut", date: "2019 – 2021", sv: { title: "Elkraftsingenjör (YH)" } },
     { title: "Bachelor of Engineering", place: "Michigan State University", date: "1996 – 1999" }
   ],
 
@@ -65,10 +84,34 @@ const SITE = {
   comingSoon: "Coming soon",
   comingSoonText: "",                  // optional line under "Coming soon"
 
-  // Dark band near the bottom
+  // Dark "looking for an intern" section near the bottom, in two languages
+  // (the SV / EN switch in the About section and in this band changes both).
   band: {
-    title: "Looking for a 3D print intern?",
-    text:  "I am searching for an internship (LIA) in additive manufacturing, with an interest in 3D scanning. Let's talk.",
-    button: "Get in touch"
+    en: {
+      title: "Looking for a 3D print intern?",
+      lead: "I'm looking for an internship (LIA) with a studio or company working with 3D printing and additive manufacturing. I'm also interested in the 3D scanning side and would love to get exposure to it and develop there.",
+      points: [
+        { title: "Hands-on with printers",
+          text: "Seven years of printing at home on FDM and resin, including slicing, calibrating and troubleshooting." },
+        { title: "Design with printing in mind",
+          text: "I model in Autodesk Fusion and think about tolerances, snap-fits and supports from the first sketch." },
+        { title: "An engineer's work habits",
+          text: "Five years as an electrical power engineer: precise drawings, clear documentation and working with customers and contractors." }
+      ],
+      closing: "I want to learn how 3D printing is used from product development and prototyping through to production, and gradually take on more responsibility. And while I'm comfortable with printer maintenance, I'm sure there is much more to learn. Say hello below."
+    },
+    sv: {
+      title: "Söker ni en LIA-praktikant inom 3D-print?",
+      lead: "Jag söker LIA hos en studio eller ett företag som jobbar med 3D-print och additiv tillverkning. Jag är också intresserad av 3D-skanning och vill gärna få en inblick i den sidan och utvecklas där.",
+      points: [
+        { title: "Praktisk printvana",
+          text: "Sju år av printing hemma med FDM och resin, med slicing, kalibrering och felsökning." },
+        { title: "Konstruerar för printing",
+          text: "Jag konstruerar i Autodesk Fusion och tänker på toleranser, snap-fit och support redan från första skissen." },
+        { title: "Ingenjörens arbetssätt",
+          text: "Fem år som elkraftsingenjör: noggranna ritningar, tydlig dokumentation och samarbete med kunder och entreprenörer." }
+      ],
+      closing: "Jag vill lära mig hur 3D-print används, från produktutveckling och prototyper till produktion, och successivt ta mer ansvar. Och även om jag är trygg med skrivarunderhåll finns det säkert mycket mer att lära. Hör av er nedan."
+    }
   }
 };

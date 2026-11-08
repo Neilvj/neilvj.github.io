@@ -7,7 +7,7 @@ Personal portfolio for internship (LIA) and job applications in additive manufac
 | What you want to change | File |
 | --- | --- |
 | Colours, font sizes, spacing, positions, grid columns, image filter | `css/theme.css` (the master list) |
-| Name, role, About text, experience, education, contact details, CV file name | `js/config.js` |
+| Name, role, About text and the intern section (both in English and Swedish), experience, education, contact details, CV file name | `js/config.js` |
 | School Projects and Personal Projects | `js/projects.js` |
 | Page structure | `index.html` |
 | Layout rules (rarely needs touching) | `css/style.css` |

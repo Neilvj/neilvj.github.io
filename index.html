@@ -63,8 +63,8 @@
     <section class="section" id="about">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">About</span>
-          <h2>About me</h2>
+          <span class="eyebrow" id="about-eyebrow">About</span>
+          <h2 id="about-title">About me</h2>
         </div>
         <div class="about-grid">
           <div class="about-left">
@@ -74,6 +74,10 @@
           <div id="timelines"></div>
         </div>
         <div class="about-banner" id="about-banner"></div>
+        <div class="lang-switch" role="group" aria-label="Language of the About me and intern sections">
+          <button type="button" class="lang-btn" data-lang="sv" lang="sv" aria-label="Svenska" aria-pressed="false">SV</button>
+          <button type="button" class="lang-btn" data-lang="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
+        </div>
       </div>
     </section>
 
@@ -102,8 +106,13 @@
     <section class="band">
       <div class="container">
         <h2 id="band-title"></h2>
-        <p id="band-text"></p>
-        <a class="btn" id="band-btn" href="#contact"></a>
+        <p class="band-lead" id="band-lead"></p>
+        <ul class="band-points" id="band-points"></ul>
+        <p class="band-closing" id="band-closing"></p>
+        <div class="lang-switch lang-switch--dark" role="group" aria-label="Language of the About me and intern sections">
+          <button type="button" class="lang-btn" data-lang="sv" lang="sv" aria-label="Svenska" aria-pressed="false">SV</button>
+          <button type="button" class="lang-btn" data-lang="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
+        </div>
       </div>
     </section>
 
