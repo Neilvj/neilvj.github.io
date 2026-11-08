@@ -20,7 +20,12 @@ p { margin: 0; color: var(--color-text-soft); }
 .container { width: 100%; max-width: var(--page-width); margin: 0 auto; padding: 0 var(--page-padding); }
 .section { padding: var(--section-space) 0; }
 .section--soft { background: var(--color-bg-soft); }
-.section-head { display: flex; flex-direction: column; gap: .75rem; margin-bottom: 3rem; max-width: 40rem; }
+#about    { background: var(--bg-about); }
+#school   { background: var(--bg-school); }
+#personal { background: var(--bg-personal); }
+#contact  { background: var(--bg-contact); }
+.site-footer { background: var(--bg-footer); }
+.section-head { display: flex; flex-direction: column; gap: .75rem; margin-bottom: 2rem; max-width: 40rem; }
 .section-head h2 { font-size: var(--size-h2); }
 .eyebrow {
   display: inline-flex; align-items: center; gap: .5rem;

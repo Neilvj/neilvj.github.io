@@ -7,13 +7,22 @@
 
   /* ---------- 1. COLORS ---------- */
   --color-text:        #222222;   /* main text and headings            */
-  --color-text-soft:   #555555;   /* paragraphs, small grey text (was #7B7B7B, now WCAG AAA) */
+  --color-text-soft:   #404040;   /* paragraphs, small grey text. WCAG AAA (7:1+) on every section grey below */
   --color-bg:          #FFFFFF;   /* page background                   */
   --color-bg-soft:     #F8F8F8;   /* alternate sections, cards         */
   --color-dark:        #222222;   /* dark band, buttons                */
   --color-on-dark:     #FFFFFF;   /* text on dark band / buttons       */
-  --color-line:        #E6E6E6;   /* thin divider lines                */
-  --color-tag-bg:      #EFEFEF;   /* small tag pills                   */
+  --color-line:        rgba(0,0,0,.13); /* thin divider lines (see-through so they work on every grey) */
+  --color-tag-bg:      rgba(255,255,255,.75); /* small tag pills             */
+
+  /* Background grey of each section (light pastel greys, each one different).
+     The top splash (hero) keeps --color-bg-soft. If you change a grey to a darker one,
+     re-check the text contrast on color.review. */
+  --bg-about:          #EDEEF0;
+  --bg-school:         #E2E4E7;
+  --bg-personal:       #EDEBE8;
+  --bg-contact:        #DCDFE2;
+  --bg-footer:         var(--bg-contact); /* footer matches the Contact section */
 
   /* ---------- 2. FONT ---------- */
   --font-main: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
@@ -31,7 +40,7 @@
   /* ---------- 4. SPACING AND SHAPE ---------- */
   --page-width:      1200px;                 /* max content width       */
   --page-padding:    clamp(1.25rem, 4vw, 3rem); /* left/right edge      */
-  --section-space:   clamp(4rem, 9vw, 8rem); /* gap above/below sections */
+  --section-space:   clamp(2.5rem, 5vw, 4.5rem); /* gap above/below sections */
   --radius:          16px;                   /* card corners            */
   --radius-pill:     999px;                  /* tags and buttons        */
   --header-height:   72px;
@@ -59,7 +68,7 @@
   --card-image-ratio: 16 / 10;               /* try 4 / 3 or 1 / 1      */
 
   /* ---------- 8. DARK CALL-TO-ACTION BAND ---------- */
-  --band-padding: clamp(3rem, 8vw, 6rem);
+  --band-padding: clamp(2.5rem, 5vw, 4rem);
 
   /* ---------- 9. LOGO AND ABOUT PHOTO ---------- */
   --logo-height:          30px;              /* logo size in the header */
@@ -71,7 +80,7 @@
   --header-bg:    var(--color-dark);         /* same dark grey as the intern band */
   --header-text:  var(--color-on-dark);      /* menu text and hamburger lines     */
   --header-line:  rgba(255,255,255,.14);     /* thin lines in the bar / mobile menu */
-  --logo-filter:  invert(1);                 /* white logo on dark bar. Use "none" on a light bar */
+  --logo-filter:  none;                      /* logo.png is already white-line + yellow for the dark bar. If you ever use a black-line logo on the dark bar, set invert(1) */
 
   /* ---------- 11. PORTFOLIO IMAGES ---------- */
   --card-image-filter: grayscale(1);         /* black and white until clicked. "none" = always colour */
