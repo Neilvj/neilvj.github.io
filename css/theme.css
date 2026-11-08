@@ -66,6 +66,10 @@
   --grid-columns:     3;                     /* cards per row           */
   --card-gap:         1.75rem;
   --card-image-ratio: 16 / 10;               /* try 4 / 3 or 1 / 1      */
+  --page-size:        6;                     /* projects per page; arrows/dots appear when there are more */
+  --arrow-size:       48px;                  /* floating side arrows    */
+  --arrow-bg:         var(--color-dark);
+  --arrow-color:      var(--color-on-dark);
 
   /* ---------- 8. DARK CALL-TO-ACTION BAND ---------- */
   --band-padding: clamp(2.5rem, 5vw, 4rem);
@@ -101,6 +105,7 @@
     --hero-columns:     1fr;                 /* photo goes under text   */
     --hero-image-height: 50vh;
     --grid-columns:     1;
+    --page-size:        2;                   /* projects per page on phones */
     --header-height:    64px;
     --bgword-size:      17vw;
     --bgword-top:       43%;

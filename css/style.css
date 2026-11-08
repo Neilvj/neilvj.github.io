@@ -179,6 +179,52 @@ p { margin: 0; color: var(--color-text-soft); }
   background: var(--color-dark); color: var(--color-on-dark);
 }
 
+/* ---------- Project pages: side-scrolling pages of cards with arrows + dots ---------- */
+.pager { position: relative; }
+.pager-track {
+  position: relative; display: flex; gap: var(--card-gap);
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory; scrollbar-width: none;
+  padding: 10px; margin: -10px;          /* room so hover/focus outlines are not cut off */
+  scroll-padding-inline: 10px;
+}
+.pager-track::-webkit-scrollbar { display: none; }
+.pager-track:focus-visible { outline: 2px solid var(--color-text); outline-offset: 2px; border-radius: var(--radius); }
+.pager-page { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; align-content: start; }
+@media (prefers-reduced-motion: no-preference) { .pager-track { scroll-behavior: smooth; } }
+
+.pager-controls { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1.75rem; }
+.pager-dots { display: flex; gap: .6rem; }
+.pager-dot {
+  width: 10px; height: 10px; padding: 0; border-radius: 50%; border: 1.5px solid var(--color-text);
+  background: transparent; cursor: pointer;
+}
+.pager-dot[aria-current="true"] { background: var(--color-text); }
+.pager-dot:focus-visible, .pager-btn:focus-visible { outline: 2px solid var(--color-text); outline-offset: 3px; }
+
+.pager-btn {
+  width: var(--arrow-size); height: var(--arrow-size); border-radius: 50%; border: 0; padding: 0;
+  display: grid; place-items: center; cursor: pointer;
+  background: var(--arrow-bg); color: var(--arrow-color);
+  box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  transition: opacity .2s ease, transform .2s ease;
+}
+.pager-btn:hover { transform: scale(1.08); }
+.pager-btn[disabled] { opacity: 0; pointer-events: none; }
+/* Wide screens: the arrows float on the left/right edges, centred on the cards */
+.pager-prev, .pager-next { position: absolute; top: calc(50% - 2rem); z-index: 2; }
+.pager-prev { left: calc(var(--arrow-size) / -2); }
+.pager-next { right: calc(var(--arrow-size) / -2); }
+@media (max-width: 1000px) {
+  .pager-prev { left: .4rem; }
+  .pager-next { right: .4rem; }
+}
+/* Phones: arrows sit on each side of the dots, under the cards */
+@media (max-width: 800px) {
+  .pager-prev, .pager-next { position: static; }
+  .pager-btn[disabled] { opacity: .3; }
+}
+
 /* "Coming soon" box in an empty project section */
 .coming-soon {
   grid-column: 1 / -1; display: flex; flex-direction: column; gap: .5rem; align-items: center; justify-content: center;

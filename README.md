@@ -19,6 +19,8 @@ Personal portfolio for internship (LIA) and job applications in additive manufac
    `title`, `text`, `tags`, `image`, and optionally `video` (file in `animation/`).
 3. Upload the image and the changed file to GitHub.
 
+Projects show 6 per page. When a section has more, arrows and dots appear to move between pages. Change the number with `--page-size` in `css/theme.css` (it is 2 on phones).
+
 All project images show in black and white until clicked. This is set by `--card-image-filter` in `css/theme.css`.
 
 ## Replacing the CV

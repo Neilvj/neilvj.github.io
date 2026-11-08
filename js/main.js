@@ -51,28 +51,105 @@ if (SITE.aboutBanner) {
   banner.classList.add("empty");
 }
 
-/* ---------- Projects ---------- */
-function cards(list) {
-  if (!list.length) {
-    return `<div class="coming-soon reveal"><h3>${esc(SITE.comingSoon)}</h3>${SITE.comingSoonText ? `<p>${esc(SITE.comingSoonText)}</p>` : ""}</div>`;
+/* ---------- Projects (pages of cards with arrows) ---------- */
+function cardHtml(p) {
+  const img = p.image ? `<img src="images/${esc(p.image)}" alt="${esc(p.title)}" loading="lazy">` : `<div class="ph"></div>`;
+  const icon = p.link ? "↗" : p.video ? "▶" : p.image ? "+" : "";
+  const arrow = icon ? `<span class="card-arrow">${icon}</span>` : "";
+  const tags = (p.tags || []).map((t) => `<span class="tag">${esc(t)}</span>`).join("");
+  const inner = `<div class="card-img">${img}${arrow}</div><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p><div class="tags">${tags}</div>`;
+  if (p.link) return `<a class="card reveal" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>`;
+  if (p.image || p.video) {
+    return `<button type="button" class="card card--open reveal" data-title="${esc(p.title)}" data-image="${esc(p.image || "")}" data-video="${esc(p.video || "")}">${inner}</button>`;
   }
-  return list
-    .map((p) => {
-      const img = p.image ? `<img src="images/${esc(p.image)}" alt="${esc(p.title)}" loading="lazy">` : `<div class="ph"></div>`;
-      const icon = p.link ? "↗" : p.video ? "▶" : p.image ? "+" : "";
-      const arrow = icon ? `<span class="card-arrow">${icon}</span>` : "";
-      const tags = (p.tags || []).map((t) => `<span class="tag">${esc(t)}</span>`).join("");
-      const inner = `<div class="card-img">${img}${arrow}</div><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p><div class="tags">${tags}</div>`;
-      if (p.link) return `<a class="card reveal" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>`;
-      if (p.image || p.video) {
-        return `<button type="button" class="card card--open reveal" data-title="${esc(p.title)}" data-image="${esc(p.image || "")}" data-video="${esc(p.video || "")}">${inner}</button>`;
-      }
-      return `<div class="card reveal">${inner}</div>`;
-    })
-    .join("");
+  return `<div class="card reveal">${inner}</div>`;
 }
-$("#school-grid").innerHTML = cards(PROJECTS.school);
-$("#personal-grid").innerHTML = cards(PROJECTS.personal);
+
+const CHEVRON_L = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const CHEVRON_R = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+/* Builds one project section: pages of N cards (N = --page-size in theme.css),
+   side arrows + dots, swipe/scroll sideways. Rebuilds itself when N changes (e.g. phone). */
+function buildPager(el, list, label) {
+  el.classList.add("pager");
+  let size = 0;
+  let current = 0;
+
+  function pageSize() {
+    return parseInt(getComputedStyle(el).getPropertyValue("--page-size"), 10) || 6;
+  }
+
+  function render(keepFirstItem) {
+    size = pageSize();
+    if (!list.length) {
+      el.innerHTML = `<div class="grid"><div class="coming-soon reveal visible"><h3>${esc(SITE.comingSoon)}</h3>${SITE.comingSoonText ? `<p>${esc(SITE.comingSoonText)}</p>` : ""}</div></div>`;
+      return;
+    }
+    const pages = [];
+    for (let i = 0; i < list.length; i += size) pages.push(list.slice(i, i + size));
+    const multi = pages.length > 1;
+    el.innerHTML =
+      `<div class="pager-track" tabindex="0" role="region" aria-label="${esc(label)}">` +
+      pages.map((pg) => `<div class="grid pager-page">${pg.map(cardHtml).join("")}</div>`).join("") +
+      `</div>` +
+      (multi
+        ? `<div class="pager-controls">
+             <button type="button" class="pager-btn pager-prev" aria-label="Previous projects">${CHEVRON_L}</button>
+             <div class="pager-dots">${pages.map((_, i) => `<button type="button" class="pager-dot" aria-label="Page ${i + 1} of ${pages.length}"></button>`).join("")}</div>
+             <button type="button" class="pager-btn pager-next" aria-label="Next projects">${CHEVRON_R}</button>
+           </div>`
+        : "");
+    if (keepFirstItem !== undefined) el.querySelectorAll(".reveal").forEach((n) => n.classList.add("visible"));
+    if (!multi) return;
+
+    const track = el.querySelector(".pager-track");
+    const pageEls = [...el.querySelectorAll(".pager-page")];
+    const prev = el.querySelector(".pager-prev");
+    const next = el.querySelector(".pager-next");
+    const dots = [...el.querySelectorAll(".pager-dot")];
+    const padLeft = () => parseFloat(getComputedStyle(track).paddingLeft) || 0;
+
+    function goTo(i, instant) {
+      i = Math.max(0, Math.min(pageEls.length - 1, i));
+      track.scrollTo({ left: pageEls[i].offsetLeft - padLeft(), behavior: instant ? "instant" : "smooth" });
+    }
+    function update() {
+      let idx = 0, best = Infinity;
+      pageEls.forEach((p, i) => {
+        const d = Math.abs(p.offsetLeft - padLeft() - track.scrollLeft);
+        if (d < best) { best = d; idx = i; }
+      });
+      current = idx;
+      dots.forEach((d, i) => (i === idx ? d.setAttribute("aria-current", "true") : d.removeAttribute("aria-current")));
+      const focused = document.activeElement;
+      prev.disabled = idx === 0;
+      next.disabled = idx === pageEls.length - 1;
+      if ((focused === prev && prev.disabled) || (focused === next && next.disabled)) track.focus({ preventScroll: true });
+    }
+    let ticking = false;
+    track.addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { ticking = false; update(); });
+    });
+    prev.addEventListener("click", () => goTo(current - 1));
+    next.addEventListener("click", () => goTo(current + 1));
+    dots.forEach((d, i) => d.addEventListener("click", () => goTo(i)));
+    if (keepFirstItem !== undefined) goTo(Math.floor(keepFirstItem / size), true);
+    update();
+  }
+
+  render();
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (pageSize() !== size) render(current * size);
+    }, 150);
+  });
+}
+buildPager($("#school-grid"), PROJECTS.school, "School projects");
+buildPager($("#personal-grid"), PROJECTS.personal, "Personal projects");
 
 /* ---------- Viewer (click a card to enlarge the image or play the video) ---------- */
 const box = document.createElement("div");
