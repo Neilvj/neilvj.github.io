@@ -66,6 +66,9 @@
   --bgword-hatch-color:  #4A525A;            /* cross-hatch lines on the 3D sides */
   --bgword-hatch-gap:    7;                  /* distance between hatch lines, px (number only) */
   --bgword-hatch-width:  2;                  /* hatch line thickness, px (number only) */
+  --hero-drawing-opacity: 0.32;              /* strength of the hotend drawing's dark lines. 0 = hidden */
+  --hero-yellow-opacity:  0.95;              /* strength of the yellow extruded lines (logo yellow #F5C518) */
+  --hero-draw-start:      1s;                /* when the drawing starts to draw itself, after page load */
   --bgword-depth:        0.12;               /* how deep the 3D sides are. 0 = flat outline */
   --bgword-gap:          14;                 /* px between the bottom of "Hello" and the top of the word */
   --bgword-weight:       500;                /* letter thickness: 300, 400 or 500 */

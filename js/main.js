@@ -57,6 +57,16 @@ if (SITE.heroImage) {
    Looks are set in css/theme.css (section 6), the word in config.js.
    The word starts under one letter of "Hello" and runs to the right edge of the content,
    so it is measured and redrawn whenever the window changes size. */
+/* Hotend drawing: one markup, used big inside the gap in the word and small under the stats on phones.
+   Elements with class "dr" draw themselves in, "fd" fade in (see style.css, section "Hotend"). */
+const HOTEND = `<defs><pattern id="hx" patternUnits="userSpaceOnUse" width="14" height="14"><path d="M-2 16L16 -2M-2 -2L16 16" fill="none" style="stroke:var(--color-text);opacity:.5" stroke-width="1.8"/></pattern><marker id="ar" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1L10 5L0 9z" style="fill:var(--dims-color)" stroke="none"/></marker></defs>
+<g class="hd-ink" style="opacity:var(--hero-drawing-opacity);stroke:var(--color-text)" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path class="fd" style="--d:0" d="M180 8V376" stroke-width="1.8" stroke-dasharray="28 8 4 8" opacity=".7"/><path class="dr" pathLength="1" style="--d:0.0" d="M177 8V50"/><path class="dr" pathLength="1" style="--d:0.03" d="M183 8V50"/><rect class="dr" pathLength="1" style="--d:0.1" x="158" y="50" width="44" height="26" rx="3"/><path class="dr" pathLength="1" style="--d:0.21" d="M158 62H202" stroke-width="2"/><rect class="dr" pathLength="1" style="--d:0.24" x="166" y="76" width="28" height="12" rx="0"/><rect class="dr" pathLength="1" style="--d:0.32" x="128" y="88" width="104" height="7" rx="2"/><rect class="dr" pathLength="1" style="--d:0.37" x="128" y="103" width="104" height="7" rx="2"/><rect class="dr" pathLength="1" style="--d:0.43" x="128" y="118" width="104" height="7" rx="2"/><rect class="dr" pathLength="1" style="--d:0.48" x="128" y="133" width="104" height="7" rx="2"/><rect class="dr" pathLength="1" style="--d:0.54" x="128" y="148" width="104" height="7" rx="2"/><rect class="dr" pathLength="1" style="--d:0.59" x="128" y="163" width="104" height="7" rx="2"/><rect class="dr" pathLength="1" style="--d:0.65" x="128" y="178" width="104" height="7" rx="2"/><path class="dr" pathLength="1" style="--d:0.7" d="M166 95V103M166 110V118M166 125V133M166 140V148M166 155V163M166 170V178" stroke-width="2"/><path class="dr" pathLength="1" style="--d:0.7" d="M194 95V103M194 110V118M194 125V133M194 140V148M194 155V163M194 170V178" stroke-width="2"/><rect class="dr" pathLength="1" style="--d:0.73" x="172" y="185" width="16" height="42" rx="0"/><path class="dr" pathLength="1" style="--d:0.84" d="M172 200H188M172 212H188" stroke-width="2"/><rect class="fd" pathLength="1" style="--d:1.05" x="138" y="227" width="86" height="52" rx="3" fill="url(#hx)" stroke="none"/><rect class="dr" pathLength="1" style="--d:0.91" x="138" y="227" width="86" height="52" rx="3"/><rect class="fd" pathLength="1" style="--d:1.12" x="150" y="244" width="62" height="18" rx="9" stroke-dasharray="10 6" stroke-width="2"/><rect class="fd" pathLength="1" style="--d:1.26" x="160" y="279" width="40" height="18" rx="0" fill="url(#hx)" stroke="none"/><rect class="dr" pathLength="1" style="--d:1.12" x="160" y="279" width="40" height="18" rx="0"/><path class="fd" style="--d:1.33" d="M164 297L176.5 336H183.5L196 297Z" fill="url(#hx)" stroke="none"/><path class="dr" pathLength="1" style="--d:1.19" d="M164 297L176.5 336H183.5L196 297Z"/><path class="dr" pathLength="1" style="--d:1.33" d="M96 370H264" stroke-width="4"/></g>
+<g class="hd-dims" style="opacity:var(--hero-drawing-opacity);stroke:var(--dims-color);fill:var(--dims-color)" stroke-width="2" stroke-linecap="round"><path class="dr" pathLength="1" style="--d:1.4" d="M100 76V336" marker-start="url(#ar)" marker-end="url(#ar)"/><path class="fd" style="--d:1.4" d="M92 76H156M92 336H172" stroke-dasharray="6 6"/><path class="dr" pathLength="1" style="--d:1.47" d="M200 316H224L244 296H278"/><text class="fd" style="--d:1.54" x="66" y="206" font-size="29" letter-spacing="1.5" stroke="none" transform="rotate(-90 66 206)" text-anchor="middle">52.0</text><text class="fd" style="--d:1.54" x="284" y="304" font-size="29" letter-spacing="1.5" stroke="none">Ø0.4</text></g>
+<g class="hd-yellow" style="opacity:var(--hero-yellow-opacity)" fill="none" stroke="#F5C518" stroke-width="4.5" stroke-linecap="round"><circle class="fd" style="--d:1.33" cx="180" cy="339" r="6" fill="#F5C518" stroke="none"/><path class="dr" pathLength="1" style="--d:1.4" d="M180 339V356" stroke-width="4"/><path class="dr" pathLength="1" style="--d:1.68" d="M122 356H238" stroke-width="3.2"/><path class="dr" pathLength="1" style="--d:1.54" d="M114 364H246" stroke-width="3.2"/></g>`;
+const hotendSvg = (suffix) => `<svg class="hd" viewBox="0 8 360 362" aria-hidden="true" focusable="false">${suffix ? HOTEND.replace(/id="hx"/g, `id="hx${suffix}"`).replace(/url\(#hx\)/g, `url(#hx${suffix})`).replace(/id="ar"/g, `id="ar${suffix}"`).replace(/url\(#ar\)/g, `url(#ar${suffix})`) : HOTEND}</svg>`;
+$("#hotend").innerHTML = hotendSvg("");
+$("#hero-hotend").innerHTML = hotendSvg("m");
+
 function drawBgWord() {
   const hero = $(".hero"), svg = $("#bgword"), grid = $("#hero-grid"), h1 = $("#hello");
   const word = (SITE.bgWord || "").trim();
@@ -90,13 +100,21 @@ function drawBgWord() {
   const family = getComputedStyle(svg).fontFamily;
   const ctx = document.createElement("canvas").getContext("2d");
   ctx.font = weight + " 100px " + family;
-  const fontSize = width / (ctx.measureText(word).width / 100);
+  /* Optional gap in the word (between M and E) that holds the hotend drawing; the word is resized so it still fills the width */
+  const split = SITE.bgWordSplit | 0;
+  const useGap = split > 0 && split < word.length && SITE.heroDrawing !== false && window.innerWidth > 800;
+  const GAP_K = 0.8;                                    /* gap width as a share of the letter size */
+  const m1 = useGap ? ctx.measureText(word.slice(0, split)).width / 100 : 0;
+  const total = useGap ? m1 + ctx.measureText(word.slice(split)).width / 100 + GAP_K : ctx.measureText(word).width / 100;
+  const fontSize = width / total;
+  const gapPx = useGap ? GAP_K * fontSize : 0;
   const capH = (ctx.measureText("H").actualBoundingBoxAscent / 100) * fontSize;
   const top = helloBase + gap, base = top + capH;
   const depth = depthShare * fontSize, steps = Math.max(1, Math.ceil(depth / 1.5));
   const stroke = Math.min(strokeMax, fontSize * 0.03);   /* thinner outline when the word is small (phones) */
   const f = (n) => n.toFixed(1);
-  const w = esc(word);
+  const parts = useGap ? [[word.slice(0, split), 0], [word.slice(split), m1 * fontSize + gapPx]] : [[word, 0]];
+  const wt = (x, y, attrs) => parts.map(([t, o]) => `<text x="${f(x + o)}" y="${f(y)}" ${attrs}>${esc(t)}</text>`).join("");
 
   /* The same grid as the paper, used to fill the front of the letters */
   let pat = `<rect width="${large}" height="${large}" style="fill:var(--color-bg-soft)"/>`;
@@ -108,11 +126,11 @@ function drawBgWord() {
   /* 3D look: outlines stacked down to the right, grey sides on top of them, then the front face */
   let outlines = "", sides = "";
   for (let i = steps; i >= 1; i--) {
-    const x = f(x0 + (depth / 2) * (i / steps)), y = f(base + depth * (i / steps));
-    outlines += `<text x="${x}" y="${y}" fill="none">${w}</text>`;
-    sides += `<text x="${x}" y="${y}" stroke="none" style="fill:url(#bgword-hatch)">${w}</text>`;
+    const x = x0 + (depth / 2) * (i / steps), y = base + depth * (i / steps);
+    outlines += wt(x, y, 'fill="none"');
+    sides += wt(x, y, 'stroke="none" style="fill:url(#bgword-hatch)"');
   }
-  const front = `<text x="${f(x0)}" y="${f(base)}" style="fill:url(#bgword-paper) transparent;paint-order:stroke fill">${w}</text>`;
+  const front = wt(x0, base, 'style="fill:url(#bgword-paper) transparent;paint-order:stroke fill"');
 
   /* Dimension lines: width under the word, height to the right of it */
   let dims = "";
@@ -135,6 +153,15 @@ function drawBgWord() {
       `<polygon points="${f(dimX)},${f(top)} ${f(dimX - 4.5)},${f(top + 14)} ${f(dimX + 4.5)},${f(top + 14)}" stroke="none" style="fill:var(--dims-color)"/>` +
       `<polygon points="${f(dimX)},${f(base)} ${f(dimX - 4.5)},${f(base - 14)} ${f(dimX + 4.5)},${f(base - 14)}" stroke="none" style="fill:var(--dims-color)"/>` +
       label(dimX, midY, Math.round(capH), true) + `</g>`;
+  }
+
+  /* Hotend drawing: same height as the letters, centred in the gap */
+  const hd = $("#hotend");
+  if (useGap) {
+    const cx = x0 + m1 * fontSize + gapPx / 2;
+    hd.style.cssText = `display:block;left:${f(cx - capH * 360 / 362 / 2)}px;top:${f(top)}px;width:${f(capH * 360 / 362)}px;height:${f(capH)}px`;
+  } else {
+    hd.style.display = "none";
   }
 
   svg.innerHTML =

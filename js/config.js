@@ -5,8 +5,10 @@
 
 const SITE = {
   name: "Neil Ramnarine",
-  bgWord: "WELCOME",                // big 3D outline word on grid paper behind the hero. "" = off (the grid goes too)
+  bgWord: "ADDITIVE",                // big 3D outline word on grid paper behind the hero. "" = off (the grid goes too)
   bgWordStartLetter: 3,             // the word starts under this letter of the hello text. 3 = the first "l" in "Hello"
+  bgWordSplit: 7,                   // opens a gap in the word after this many letters (7 = before the last E of ADDITIVE) for the hotend drawing. 0 = no gap, no drawing
+  heroDrawing: true,                // false = turn the hotend drawing off
   hello: "Hello",
   role: "3D printing technology student",
   tagline: "From Electrical Drawings to Printed Prototypes",
