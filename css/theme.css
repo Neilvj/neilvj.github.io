@@ -46,21 +46,37 @@
   --header-height:   72px;
 
   /* ---------- 5. HERO (top of the page) ---------- */
-  --hero-min-height:     72vh;
+  --hero-top-space:      5rem;              /* gap between the black top bar and "Hello". Smaller = tighter */
+  --hero-bottom-space:   7rem;              /* gap under the stats; the width dimension line sits here, keep above ~4rem */
+  --hero-min-height:     0;                  /* 0 = hero is only as tall as its content */
   --hero-columns:        1fr 38%;            /* text column | photo column */
   --hero-image-position: center top;         /* which part of the photo is shown */
-  --hero-image-height:   70vh;               /* photo height            */
+  --hero-image-ratio:    4 / 3;              /* shape of the hero picture (width / height) */
+  --hero-image-filter:   grayscale(1);       /* black and white. "none" = colour */
 
-  /* ---------- 6. BIG FADED BACKGROUND WORD ---------- */
-  --bgword-size:     clamp(5rem, 15vw, 17rem);
-  --bgword-top:      50%;                    /* move up/down            */
-  --bgword-left:     50%;                    /* move left/right         */
-  --bgword-fill:         #222222;            /* inside the letters. transparent = outline only */
-  --bgword-stroke-width: 0;                  /* outline thickness. 0 = no outline */
+  /* ---------- 6. BIG BACKGROUND WORD (3D outline on grid paper) ----------
+     The word itself and the letter it starts under are in js/config.js (bgWord, bgWordStartLetter).
+     It always starts under that letter and runs to the right edge of the page content,
+     so its size follows the screen width by itself. */
+  --bgword-opacity:      0.06;               /* how strong the word is on the right side. 0 = hidden, 1 = full */
+  --bgword-fade-left:    0.65;               /* strength on the left compared to the right. 1 = no fade, 0 = starts invisible */
+  --bgword-stroke-width: 5;                  /* outline thickness in px (number only) */
   --bgword-stroke-color: var(--color-text);  /* outline colour */
-  --bgword-spacing:      -0.04em;            /* space between letters (outline needs >= 0) */
-  --bgword-opacity:      0.06;               /* 0 = hidden, 1 = full. Outline: 0.15-0.4 */
-  /* For the outline-only look use: fill transparent, stroke-width 2px, spacing 0.03em, opacity 0.22 */
+  --bgword-side-color:   #AEB4BA;            /* the grey sides that give the 3D look */
+  --bgword-depth:        0.12;               /* how deep the 3D sides are. 0 = flat outline */
+  --bgword-gap:          14;                 /* px between the bottom of "Hello" and the top of the word */
+  --bgword-weight:       500;                /* letter thickness: 300, 400 or 500 */
+
+  /* Grid paper behind the word. It is strongest around the word and fades out to nothing. */
+  --grid-small:          12;                 /* small squares, px (number only) */
+  --grid-large:          60;                 /* large squares, px. Must be a multiple of the small squares */
+  --grid-line-small:     #E2E5E8;
+  --grid-line-large:     #C9CED3;
+  --grid-fade-start:     25%;                /* how far out the grid stays full strength before it starts fading */
+
+  /* Dimension lines (the arrows with numbers). Hidden on phones. */
+  --dims-opacity:        0.5;                /* 0 = hide the dimension lines */
+  --dims-color:          #555B61;
 
   /* ---------- 7. PROJECT CARDS ---------- */
   --grid-columns:     3;                     /* cards per row           */
@@ -83,6 +99,11 @@
   /* ---------- 10. TOP MENU BAR ---------- */
   --header-bg:    var(--color-dark);         /* same dark grey as the intern band */
   --header-text:  var(--color-on-dark);      /* menu text and hamburger lines     */
+  --nav-hover:    var(--header-text);        /* colour of the underline that slides in on the top links (white). Logo yellow is #F5C518 */
+  --nav-arrow-hover: #F5C518;                /* Contact arrow colour on hover (yellow from the logo beak) */
+  --menu-icon-time: .5s;                     /* speed of the hamburger to X animation */
+  --glow-blue:    #3B82F6;                   /* blue wipe on the Send me a message button */
+  --ripple-color: rgba(34,34,34,.22);        /* click ripple on the other contact buttons */
   --header-line:  rgba(255,255,255,.14);     /* thin lines in the bar / mobile menu */
   --logo-filter:  none;                      /* logo.png is already white-line + yellow for the dark bar. If you ever use a black-line logo on the dark bar, set invert(1) */
 
@@ -103,12 +124,9 @@
     --size-body:        1rem;
     --hero-min-height:  auto;
     --hero-columns:     1fr;                 /* photo goes under text   */
-    --hero-image-height: 50vh;
     --grid-columns:     1;
     --page-size:        2;                   /* projects per page on phones */
     --header-height:    64px;
-    --bgword-size:      17vw;
-    --bgword-top:       43%;
     --logo-height:      26px;
     --about-photo-width: 220px;
   }

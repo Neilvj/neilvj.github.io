@@ -21,20 +21,39 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Loading screen: inline so it shows before the rest of the site arrives. Appears only if loading takes more than 0.4 s */
+    #loader { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: #fff; opacity: 0; animation: loader-in .3s .4s forwards; transition: visibility .4s; }
+    #loader.done { animation: none; opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s; }
+    @keyframes loader-in { to { opacity: 1; } }
+    .tetris { position: relative; width: 48px; height: 48px; }
+    .tetris i { position: absolute; width: 12px; height: 12px; background: #000; border-radius: 2px; opacity: 0; }
+    .tetris .t1 { left: 0;    top: 24px; box-shadow: 12px 0 #000, 0 12px #000, 12px 12px #000; animation: drop1 2.6s infinite; }
+    .tetris .t2 { left: 36px; top: 12px; box-shadow: 0 12px #000, 0 24px #000, -12px 24px #000; animation: drop2 2.6s infinite; }
+    .tetris .t3 { left: 0;    top: 12px; box-shadow: 12px 0 #000, 24px 0 #000, 24px 12px #000; animation: drop3 2.6s infinite; }
+    @keyframes drop1 { 0% { opacity: 0; transform: translateY(-48px); } 8% { opacity: 1; } 18%, 82% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; transform: none; } }
+    @keyframes drop2 { 0%, 18% { opacity: 0; transform: translateY(-48px); } 26% { opacity: 1; } 36%, 82% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; transform: none; } }
+    @keyframes drop3 { 0%, 36% { opacity: 0; transform: translateY(-48px); } 44% { opacity: 1; } 54%, 82% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .tetris i { animation: none; opacity: 1; } }
+  </style>
 </head>
 <body>
+  <div id="loader" role="status" aria-label="Loading"><div class="tetris"><i class="t1"></i><i class="t2"></i><i class="t3"></i></div></div>
+  <noscript><style>#loader { display: none; }</style></noscript>
 
   <header class="site-header">
     <div class="container">
       <a class="brand" href="#top"><img class="brand-logo" id="brand-logo" alt=""></a>
       <button class="menu-toggle" id="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav">
-        <span></span><span></span><span></span>
+        <svg class="menu-icon" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path class="mi-top" d="M4 7h16"/><path class="mi-mid" d="M4 12h16"/><path class="mi-bot" d="M4 17h16"/>
+        </svg>
       </button>
       <nav class="nav" id="nav">
         <a href="#about">About</a>
         <a href="#school">School Projects</a>
         <a href="#personal">Personal Projects</a>
-        <a href="#contact" class="nav-cta" id="nav-cta">Contact ↗</a>
+        <a href="#contact" class="nav-cta" id="nav-cta">Contact <span class="nav-arrow" aria-hidden="true">→</span></a>
       </nav>
     </div>
   </header>
@@ -44,17 +63,14 @@
       <p class="noscript-note">Neil Ramnarine – 3D printing technology student at Xenter YH, previously an electrical power engineer. This page needs JavaScript to show projects, the CV and the contact form. LinkedIn: <a href="https://www.linkedin.com/in/neilvj">linkedin.com/in/neilvj</a></p>
     </noscript>
     <section class="hero">
-      <div class="hero-bgword" id="bgword" aria-hidden="true"></div>
+      <div class="hero-grid" id="hero-grid" aria-hidden="true"></div>
+      <svg class="hero-bgword" id="bgword" aria-hidden="true"></svg>
       <div class="container hero-inner">
         <div class="hero-text">
-          <div class="stats" id="stats"></div>
           <h1 class="hero-hello" id="hello"></h1>
           <p class="hero-role" id="role"></p>
           <p class="hero-sub" id="subtitle"></p>
-          <div class="hero-actions" id="hero-actions">
-            <a class="btn btn--dark" href="#school">See my work</a>
-            <a class="btn btn--line" href="#about">About me</a>
-          </div>
+          <div class="stats" id="stats"></div>
         </div>
         <div class="hero-image" id="hero-image"></div>
       </div>
@@ -131,6 +147,14 @@
     <div class="container" id="footer-text"></div>
   </footer>
 
+  <script>
+    (function () {
+      var l = document.getElementById("loader"), done = false;
+      function hide() { if (done || !l) return; done = true; l.classList.add("done"); setTimeout(function () { l.remove(); }, 600); }
+      if (document.readyState === "complete") hide(); else window.addEventListener("load", hide);
+      setTimeout(hide, 10000);
+    })();
+  </script>
   <script src="js/config.js"></script>
   <script src="js/projects.js"></script>
   <script src="js/main.js"></script>

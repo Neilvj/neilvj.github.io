@@ -5,7 +5,8 @@
 
 const SITE = {
   name: "Neil Ramnarine",
-  bgWord: "WELCOME",                // big faded word behind the hero
+  bgWord: "WELCOME",                // big 3D outline word on grid paper behind the hero. "" = off (the grid goes too)
+  bgWordStartLetter: 3,             // the word starts under this letter of the hello text. 3 = the first "l" in "Hello"
   hello: "Hello",
   role: "3D printing technology student",
   tagline: "From Electrical Drawings to Printed Prototypes",
@@ -22,6 +23,7 @@ const SITE = {
 
   // Photo in the hero. Put the file in the images/ folder. Leave "" for no photo.
   heroImage: "",
+  heroImageAlt: "",                 // short description of the picture, for screen readers
   // Wide banner in the About section (Unsplash is fine). Leave "" for none.
   aboutBanner: "",
 
@@ -78,6 +80,19 @@ const SITE = {
     // web3forms.com (enter neilvj.inbox@gmail.com there, they email you the key).
     // While "" the popup opens a Gmail compose window instead.
     formKey:  "54d06813-bfcb-4b15-a773-c6f78d5b1c43"
+  },
+
+  // Hover explanations for project tags (one line each). A tag that is not listed here simply has no tooltip.
+  tagInfo: {
+    "Fusion":    "Autodesk Fusion: the CAD program I model parts in.",
+    "Render":    "A realistic image of the finished 3D model, made before printing.",
+    "Animation": "A short video showing how the design moves or assembles.",
+    "FDM":       "Printing by melting plastic filament and laying it down layer by layer.",
+    "Resin":     "Printing by curing liquid resin with light. Very fine detail.",
+    "PLA":       "An easy-to-print, plant-based plastic filament.",
+    "PETG":      "A tougher, more heat- and moisture-resistant filament.",
+    "Scan":      "A 3D scan: a real object captured digitally.",
+    "OrcaSlicer":"The slicer that turns a 3D model into printer instructions."
   },
 
   // Shown in an empty project section (for example Personal Projects)
