@@ -404,7 +404,8 @@ button.btn { cursor: pointer; font: inherit; font-size: .95rem; }
 .hd-wrap { position: absolute; z-index: 0; pointer-events: none; display: none; }
 .hd { display: block; width: 100%; height: 100%; overflow: visible; --t0: var(--hero-draw-start, 1s); }
 .hd text { font-family: var(--font-main); }
-.hd-ink .dr { stroke-linecap: butt; }
+/* butt ends: a round cap would show as a dot before the line starts drawing */
+.hd .dr { stroke-linecap: butt; }
 .hero-hotend { display: none; }
 @media (max-width: 800px) {
   .hero-hotend { display: block; height: 150px; margin-top: .5rem; }
