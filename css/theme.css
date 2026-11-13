@@ -60,9 +60,12 @@
      so its size follows the screen width by itself. */
   --bgword-opacity:      0.06;               /* how strong the word is on the right side. 0 = hidden, 1 = full */
   --bgword-fade-left:    0.65;               /* strength on the left compared to the right. 1 = no fade, 0 = starts invisible */
-  --bgword-stroke-width: 5;                  /* outline thickness in px (number only) */
+  --bgword-stroke-width: 2;                  /* outline thickness in px (number only) */
   --bgword-stroke-color: var(--color-text);  /* outline colour */
   --bgword-side-color:   #AEB4BA;            /* the grey sides that give the 3D look */
+  --bgword-hatch-color:  #4A525A;            /* cross-hatch lines on the 3D sides */
+  --bgword-hatch-gap:    7;                  /* distance between hatch lines, px (number only) */
+  --bgword-hatch-width:  2;                  /* hatch line thickness, px (number only) */
   --bgword-depth:        0.12;               /* how deep the 3D sides are. 0 = flat outline */
   --bgword-gap:          14;                 /* px between the bottom of "Hello" and the top of the word */
   --bgword-weight:       500;                /* letter thickness: 300, 400 or 500 */

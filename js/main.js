@@ -69,6 +69,7 @@ function drawBgWord() {
   const gap = num("--bgword-gap", 14), weight = num("--bgword-weight", 500);
   const small = Math.max(2, num("--grid-small", 12)), large = Math.max(small, num("--grid-large", 60));
   const dimsOpacity = num("--dims-opacity", 0.5);
+  const hatch = Math.max(3, num("--bgword-hatch-gap", 5)), hatchWidth = num("--bgword-hatch-width", 0.8);
 
   /* Where the chosen letter of "Hello" starts, and the line the letters stand on */
   const hr = hero.getBoundingClientRect();
@@ -109,7 +110,7 @@ function drawBgWord() {
   for (let i = steps; i >= 1; i--) {
     const x = f(x0 + (depth / 2) * (i / steps)), y = f(base + depth * (i / steps));
     outlines += `<text x="${x}" y="${y}" fill="none">${w}</text>`;
-    sides += `<text x="${x}" y="${y}" stroke="none" style="fill:var(--bgword-side-color)">${w}</text>`;
+    sides += `<text x="${x}" y="${y}" stroke="none" style="fill:url(#bgword-hatch)">${w}</text>`;
   }
   const front = `<text x="${f(x0)}" y="${f(base)}" style="fill:url(#bgword-paper) transparent;paint-order:stroke fill">${w}</text>`;
 
@@ -137,7 +138,9 @@ function drawBgWord() {
   }
 
   svg.innerHTML =
-    `<defs><pattern id="bgword-paper" patternUnits="userSpaceOnUse" width="${large}" height="${large}">${pat}</pattern></defs>` +
+    `<defs><pattern id="bgword-paper" patternUnits="userSpaceOnUse" width="${large}" height="${large}">${pat}</pattern>` +
+    `<pattern id="bgword-hatch" patternUnits="userSpaceOnUse" width="${hatch}" height="${hatch}"><rect width="${hatch}" height="${hatch}" style="fill:var(--bgword-side-color)"/>` +
+    `<path d="M-1 ${hatch + 1}L${hatch + 1} -1M-1 -1L${hatch + 1} ${hatch + 1}" fill="none" style="stroke:var(--bgword-hatch-color);stroke-width:${hatchWidth}"/></pattern></defs>` +
     `<g opacity="${opacity}" font-size="${f(fontSize)}" stroke-linejoin="miter" stroke-miterlimit="3" style="stroke:var(--bgword-stroke-color);stroke-width:${stroke * 2}px">${outlines}${sides}${front}</g>` +
     dims;
   svg.querySelectorAll(".dim-label rect").forEach((r) => (r.style.fill = "var(--color-bg-soft)"));
