@@ -238,9 +238,19 @@ if (SITE.aboutBanner) {
 }
 
 /* ---------- Projects (pages of cards with arrows) ---------- */
+/* 3D models (.glb in models/) are shown with Google's <model-viewer>. It is only loaded when a project uses one. */
+if ([...PROJECTS.school, ...PROJECTS.personal].some((p) => p.model)) {
+  const mv = document.createElement("script");
+  mv.type = "module";
+  mv.src = "https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js";
+  document.head.appendChild(mv);
+}
+
 function cardHtml(p) {
-  const img = p.image ? `<img src="images/${esc(p.image)}" alt="${esc(p.title)}" loading="lazy">` : `<div class="ph"></div>`;
-  const icon = p.link ? "↗" : p.video ? "▶" : p.image ? "+" : "";
+  const img = p.image ? `<img src="images/${esc(p.image)}" alt="${esc(p.title)}" loading="lazy">`
+    : p.model ? `<model-viewer class="card-model" src="models/${esc(p.model)}" alt="${esc(p.title)}" loading="lazy" interaction-prompt="none" tabindex="-1" aria-hidden="true"></model-viewer>`
+    : `<div class="ph"></div>`;
+  const icon = p.link ? "↗" : p.video ? "▶" : p.model ? "3D" : p.image ? "+" : "";
   const arrow = icon ? `<span class="card-arrow">${icon}</span>` : "";
   const tags = (p.tags || []).map((t) => {
     const tip = (SITE.tagInfo || {})[t];
@@ -248,8 +258,8 @@ function cardHtml(p) {
   }).join("");
   const inner = `<div class="card-img">${img}${arrow}</div><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p><div class="tags">${tags}</div>`;
   if (p.link) return `<a class="card reveal" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>`;
-  if (p.image || p.video) {
-    return `<button type="button" class="card card--open reveal" data-title="${esc(p.title)}" data-image="${esc(p.image || "")}" data-video="${esc(p.video || "")}">${inner}</button>`;
+  if (p.image || p.video || p.model) {
+    return `<button type="button" class="card card--open reveal" data-title="${esc(p.title)}" data-image="${esc(p.image || "")}" data-video="${esc(p.video || "")}" data-model="${esc(p.model || "")}">${inner}</button>`;
   }
   return `<div class="card reveal">${inner}</div>`;
 }
@@ -340,7 +350,7 @@ function buildPager(el, list, label) {
 buildPager($("#school-grid"), PROJECTS.school, "School projects");
 buildPager($("#personal-grid"), PROJECTS.personal, "Personal projects");
 
-/* ---------- Viewer (click a card to enlarge the image or play the video) ---------- */
+/* ---------- Viewer (click a card to enlarge the image, play the video or open the 3D model) ---------- */
 const box = document.createElement("div");
 box.className = "lightbox";
 box.setAttribute("role", "dialog");
@@ -352,11 +362,13 @@ const boxCap = box.querySelector(".lightbox-caption");
 let lastFocus = null;
 
 function openViewer(card) {
-  const { title, image, video } = card.dataset;
-  boxBody.innerHTML = video
+  const { title, image, video, model } = card.dataset;
+  boxBody.innerHTML = model
+    ? `<model-viewer class="lightbox-model" src="models/${model}" alt="${title}" camera-controls auto-rotate shadow-intensity="1" touch-action="none"></model-viewer>`
+    : video
     ? `<video src="animation/${video}" ${image ? `poster="images/${image}"` : ""} controls autoplay loop playsinline></video>`
     : `<img src="images/${image}" alt="${title}">`;
-  boxCap.textContent = title;
+  boxCap.textContent = model ? `${title} – drag to rotate, scroll or pinch to zoom` : title;
   lastFocus = card;
   box.classList.add("open");
   document.body.style.overflow = "hidden";
@@ -567,7 +579,7 @@ document.addEventListener("keydown", (e) => {
   if (e.key !== "Tab") return;
   const open = document.querySelector(".contact-modal.open, .lightbox.open");
   if (!open) return;
-  const items = [...open.querySelectorAll("button, input, textarea, video[controls], a[href]")]
+  const items = [...open.querySelectorAll("button, input, textarea, video[controls], model-viewer[camera-controls], a[href]")]
     .filter((el) => !el.disabled && el.tabIndex !== -1 && el.offsetParent !== null);
   if (!items.length) return;
   const first = items[0], last = items[items.length - 1];

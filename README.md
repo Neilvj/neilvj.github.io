@@ -41,4 +41,5 @@ Upload the files to the GitHub repository. GitHub Pages republishes automaticall
 - `js/` content and behaviour
 - `images/` renders, portrait, logo, favicon, share preview
 - `animation/` project videos
+- `models/` 3D models (.glb) for projects with a rotatable 3D view
 - `documents/` CV

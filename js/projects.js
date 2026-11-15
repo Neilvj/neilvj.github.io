@@ -4,6 +4,8 @@
 
    image: file name inside the images/ folder (leave "" for a grey placeholder)
    video: (optional) file name inside the animation/ folder. Clicking the card plays it.
+   model: (optional) .glb file name inside the models/ folder. Clicking the card opens a 3D view
+          the visitor can rotate and zoom. With image left as "" the card shows the model itself.
    link:  (optional) page or PDF to open when clicked instead of the viewer
    An empty personal list shows the "Coming soon" box (text is in config.js).
    ===================================================================== */
@@ -53,6 +55,13 @@ const PROJECTS = {
       tags: ["Fusion", "Animation"],
       image: "playground-swing.jpg",
       video: "playground-animation.mp4"
+    },
+    {
+      title: "Perisphinctes fossil",
+      text: "Scanned and compiled with RealityScan and Blender. Click to rotate and zoom.",
+      tags: ["Scan", "RealityScan", "Blender"],
+      image: "",
+      model: "Perisphinctes.glb"
     }
   ],
 
