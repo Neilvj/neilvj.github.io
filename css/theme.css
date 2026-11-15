@@ -33,6 +33,7 @@
   --size-hero:   clamp(4rem, 11vw, 9rem);    /* big "Hello" word        */
   --size-h2:     clamp(2.2rem, 4.5vw, 3.6rem); /* section headings      */
   --size-h3:     1.35rem;                    /* card titles, job titles */
+  --size-subhead: clamp(1.4rem, 2.4vw, 1.9rem); /* text buttons inside a project section (CAD, Scanning) */
   --size-body:   1.05rem;                    /* normal text             */
   --size-small:  0.88rem;                    /* dates, tags, captions   */
   --size-stat:   clamp(2rem, 4vw, 3rem);     /* big numbers             */
@@ -90,6 +91,8 @@
   --card-image-ratio: 16 / 10;               /* try 4 / 3 or 1 / 1      */
   --page-size:        6;                     /* projects per page; arrows/dots appear when there are more */
   --arrow-size:       48px;                  /* floating side arrows    */
+  --tab-gap:          2.25rem;               /* space between the text buttons (CAD, Scanning) */
+  --tab-slide-time:   .55s;                  /* how fast the cards slide when a button is clicked */
   --arrow-bg:         var(--color-dark);
   --arrow-color:      var(--color-on-dark);
 
@@ -115,6 +118,9 @@
 
   /* ---------- 11. PORTFOLIO IMAGES ---------- */
   --card-image-filter: grayscale(1);         /* black and white until clicked. "none" = always colour */
+
+  /* ---------- 12. 3D MODEL VIEWER ---------- */
+  --model-bg: radial-gradient(circle at 50% 42%, #ECEEF0 0%, #D5D8DC 60%, #BFC4C9 100%); /* soft grey behind 3D models, lighter in the middle. One flat colour also works, e.g. #D9DCDF */
 }
 
 /* Tablet: 2 cards per row */

@@ -239,7 +239,8 @@ if (SITE.aboutBanner) {
 
 /* ---------- Projects (pages of cards with arrows) ---------- */
 /* 3D models (.glb in models/) are shown with Google's <model-viewer>. It is only loaded when a project uses one. */
-if ([...PROJECTS.school, ...PROJECTS.personal].some((p) => p.model)) {
+const allProjects = (list) => list.flatMap((x) => (x && x.projects ? x.projects : [x]));
+if ([...allProjects(PROJECTS.school), ...allProjects(PROJECTS.personal)].some((p) => p.model)) {
   const mv = document.createElement("script");
   mv.type = "module";
   mv.src = "https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js";
@@ -347,8 +348,48 @@ function buildPager(el, list, label) {
     }, 150);
   });
 }
-buildPager($("#school-grid"), PROJECTS.school, "School projects");
-buildPager($("#personal-grid"), PROJECTS.personal, "Personal projects");
+/* A section is either one plain list of projects, or a list of groups ({ group, projects }).
+   Groups become text buttons (tabs) above the cards: the first group shows first,
+   clicking another button slides its cards in. */
+function buildSection(el, list, label) {
+  if (!list.some((x) => x && x.projects)) return buildPager(el, list, label);
+  const id = (i) => `${el.id}-tab-${i}`;
+  el.innerHTML =
+    `<div class="tabs reveal" role="tablist" aria-label="${esc(label)}">` +
+    list.map((g, i) => `<button type="button" class="tab" role="tab" id="${id(i)}" aria-controls="${id(i)}-panel">${esc(g.group)}</button>`).join("") +
+    `</div><div class="tabs-view"><div class="tabs-track">` +
+    list.map((g, i) => `<div class="tab-panel" role="tabpanel" id="${id(i)}-panel" aria-labelledby="${id(i)}"><div class="sub-grid"></div></div>`).join("") +
+    `</div></div>`;
+  const view = el.querySelector(".tabs-view"), track = el.querySelector(".tabs-track");
+  const tabs = [...el.querySelectorAll(".tab")], panels = [...el.querySelectorAll(".tab-panel")];
+  panels.forEach((p, i) => buildPager(p.querySelector(".sub-grid"), list[i].projects || [], `${label}: ${list[i].group}`));
+
+  let current = 0;
+  const fit = () => { view.style.height = panels[current].offsetHeight + "px"; };   /* the box is as tall as the open group */
+  function show(i) {
+    current = i;
+    tabs.forEach((t, k) => { t.setAttribute("aria-selected", String(k === i)); t.tabIndex = k === i ? 0 : -1; });
+    panels.forEach((p, k) => { p.inert = k !== i; });                              /* hidden groups cannot be tabbed into */
+    track.style.transform = `translateX(${-100 * i}%)`;
+    fit();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener("click", () => show(i));
+    t.addEventListener("keydown", (e) => {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      e.preventDefault();
+      const n = (i + (e.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+      show(n);
+      tabs[n].focus();
+    });
+  });
+  if ("ResizeObserver" in window) { const ro = new ResizeObserver(fit); panels.forEach((p) => ro.observe(p)); }
+  window.addEventListener("resize", fit);
+  window.addEventListener("load", fit);
+  show(0);
+}
+buildSection($("#school-grid"), PROJECTS.school, "School projects");
+buildSection($("#personal-grid"), PROJECTS.personal, "Personal projects");
 
 /* ---------- Viewer (click a card to enlarge the image, play the video or open the 3D model) ---------- */
 const box = document.createElement("div");

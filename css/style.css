@@ -211,7 +211,7 @@ p { margin: 0; color: var(--color-text-soft); }
 .card-img img { width: 100%; height: 100%; object-fit: cover; filter: var(--card-image-filter); transition: transform .5s ease; }
 .card-img .ph { position: absolute; inset: 0; background: linear-gradient(135deg, #EDEDED, #D9D9D9); }
 .card:hover .card-img img { transform: scale(1.04); }
-.card-img .card-model { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: var(--card-image-filter); }
+.card-img .card-model { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: var(--card-image-filter); background: var(--model-bg); }
 .card-arrow {
   position: absolute; top: 50%; left: 50%; width: 56px; height: 56px; border-radius: 50%;
   background: var(--color-dark); color: var(--color-on-dark);
@@ -223,6 +223,28 @@ p { margin: 0; color: var(--color-text-soft); }
 .card p { font-size: var(--size-small); }
 .tags { display: flex; flex-wrap: wrap; gap: .4rem; }
 .tag { font-size: .75rem; padding: .2rem .7rem; border-radius: var(--radius-pill); background: var(--color-tag-bg); color: var(--color-text); }
+
+/* Groups inside a project section (for example CAD and Scanning): text buttons, cards slide sideways */
+.tabs { display: flex; flex-wrap: wrap; gap: .25rem var(--tab-gap); margin-bottom: 1.5rem; border-bottom: 1px solid var(--color-line); }
+.tab {
+  position: relative; font: inherit; font-size: var(--size-subhead); line-height: 1.2; letter-spacing: -0.02em;
+  padding: 0 0 .6rem; border: 0; background: none; cursor: pointer;
+  color: var(--color-text-soft); opacity: .55; transition: opacity .25s ease, color .25s ease;
+}
+.tab::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--color-text);
+  transform: scaleX(0); transform-origin: left; transition: transform .35s ease;
+}
+.tab:hover { opacity: 1; }
+.tab[aria-selected="true"] { color: var(--color-text); opacity: 1; }
+.tab[aria-selected="true"]::after { transform: scaleX(1); }
+.tab:focus-visible { outline: 2px solid var(--color-text); outline-offset: 4px; border-radius: 4px; }
+/* The box is a little bigger than the cards so the side arrows and focus outlines are not cut off */
+.tabs-view { --tab-bleed: calc(var(--arrow-size) / 2 + 6px); overflow: hidden; margin: -10px calc(var(--tab-bleed) * -1); transition: height var(--tab-slide-time) ease; }
+.tabs-track { display: flex; align-items: flex-start; transition: transform var(--tab-slide-time) cubic-bezier(.7,0,.3,1); }
+.tab-panel { flex: 0 0 100%; min-width: 0; padding: 10px var(--tab-bleed); }
+@media (max-width: 1000px) { .tabs-view { --tab-bleed: 10px; } }
+@media (prefers-reduced-motion: reduce) { .tabs-view, .tabs-track, .tab, .tab::after { transition: none; } }
 
 /* Cards that open the viewer are buttons: reset button look */
 .card--open { font: inherit; text-align: left; padding: 0; border: 0; background: none; cursor: zoom-in; width: 100%; }
@@ -298,7 +320,7 @@ p { margin: 0; color: var(--color-text-soft); }
 .lightbox-body img, .lightbox-body video { max-width: 100%; max-height: calc(100vh - 8rem); border-radius: var(--radius); background: #000; }
 .lightbox-body .lightbox-model {
   width: min(1100px, calc(100vw - 2rem)); height: min(75vh, calc(100vh - 8rem));
-  border-radius: var(--radius); background: #F2F2F2;
+  border-radius: var(--radius); background: var(--model-bg);
 }
 .lightbox-caption { color: #fff; font-size: var(--size-small); }
 .lightbox-close {

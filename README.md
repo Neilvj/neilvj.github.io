@@ -6,7 +6,7 @@ Personal portfolio for internship (LIA) and job applications in additive manufac
 
 | What you want to change | File |
 | --- | --- |
-| Colours, font sizes, spacing, positions, grid columns, image filter | `css/theme.css` (the master list) |
+| Colours, font sizes, spacing, positions, grid columns, image filter, 3D viewer background | `css/theme.css` (the master list) |
 | Name, role, About text and the intern section (both in English and Swedish), experience, education, contact details, CV file name | `js/config.js` |
 | School Projects and Personal Projects | `js/projects.js` |
 | Page structure | `index.html` |
@@ -18,6 +18,8 @@ Personal portfolio for internship (LIA) and job applications in additive manufac
 2. Add a block to the `school` or `personal` list in `js/projects.js`, copying an existing one:
    `title`, `text`, `tags`, `image`, and optionally `video` (file in `animation/`).
 3. Upload the image and the changed file to GitHub.
+
+School Projects is split into groups (CAD, Scanning) shown as text buttons above the cards. The first group shows first; clicking another button slides its cards in. In `js/projects.js` each one is a `group` with its own `projects` list; copy a whole group block to add a button.
 
 Projects show 6 per page. When a section has more, arrows and dots appear to move between pages. Change the number with `--page-size` in `css/theme.css` (it is 2 on phones).
 
