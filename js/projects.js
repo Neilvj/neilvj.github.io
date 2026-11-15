@@ -84,7 +84,7 @@ const PROJECTS = {
           title: "Painted sculpture",
           text: "Photogrammetry scan from 128 photos, compiled with RealityScan and Blender. Click to rotate and zoom.",
           tags: ["Scan", "RealityScan", "Blender"],
-          image: "",
+          image: "painted-sculpture.jpg",
           model: "Statue_large.glb",
           camera: "Nikon D7200 + Nikkor 17-55mm DX"
         }
