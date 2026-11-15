@@ -7,6 +7,8 @@
    model: (optional) .glb file name inside the models/ folder. Clicking the card opens a 3D view
           the visitor can rotate and zoom. With image left as "" the card shows the model itself.
    camera: (optional) camera used for a scan. Shown as one more white capsule after the tags.
+   gallery: (optional) list of extra image file names inside the images/ folder, e.g. ["a.jpg", "b.jpg"].
+          Clicking the card opens the card image first; arrows in the popup step through the extra images.
    link:  (optional) page or PDF to open when clicked instead of the viewer
    An empty personal list shows the "Coming soon" box (text is in config.js).
 
@@ -77,12 +79,33 @@ const PROJECTS = {
           image: "",
           model: "Perisphinctes.glb",
           camera: "Sony Xperia 1 VII"
+        },
+        {
+          title: "Painted sculpture",
+          text: "Photogrammetry scan from 128 photos, compiled with RealityScan and Blender. Click to rotate and zoom.",
+          tags: ["Scan", "RealityScan", "Blender"],
+          image: "",
+          model: "Statue_large.glb",
+          camera: "Nikon D7200 + Nikkor 17-55mm DX"
         }
       ]
     }
   ],
 
   personal: [
-    /* Coming soon. Add projects here later, same format as above. */
+    {
+      title: "Phone and tablet stand",
+      text: "Desk stand for a phone or tablet with a groove that holds the S Pen. Click to see the print.",
+      tags: ["Fusion", "Creality Print", "FDM"],
+      image: "tablet-stand-slicer.jpg",
+      gallery: ["tablet-stand-print.jpg", "tablet-stand-in-use.jpg"]
+    },
+    {
+      title: "Desk shelf supports",
+      text: "Printed side supports with a circle lattice that carry a wooden monitor shelf. Click to see the print.",
+      tags: ["Fusion", "Creality Print", "FDM"],
+      image: "desk-shelf-slicer.jpg",
+      gallery: ["desk-shelf-desk.jpg", "desk-shelf-lattice.jpg"]
+    }
   ]
 };

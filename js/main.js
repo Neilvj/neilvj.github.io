@@ -261,7 +261,7 @@ function cardHtml(p) {
   const inner = `<div class="card-img">${img}${arrow}</div><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p><div class="tags">${tags}${camera}</div>`;
   if (p.link) return `<a class="card reveal" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>`;
   if (p.image || p.video || p.model) {
-    return `<button type="button" class="card card--open reveal" data-title="${esc(p.title)}" data-image="${esc(p.image || "")}" data-video="${esc(p.video || "")}" data-model="${esc(p.model || "")}">${inner}</button>`;
+    return `<button type="button" class="card card--open reveal" data-title="${esc(p.title)}" data-image="${esc(p.image || "")}" data-video="${esc(p.video || "")}" data-model="${esc(p.model || "")}" data-gallery="${esc((p.gallery || []).join("|"))}">${inner}</button>`;
   }
   return `<div class="card reveal">${inner}</div>`;
 }
@@ -397,24 +397,38 @@ const box = document.createElement("div");
 box.className = "lightbox";
 box.setAttribute("role", "dialog");
 box.setAttribute("aria-modal", "true");
-box.innerHTML = `<button type="button" class="lightbox-close" aria-label="Close">×</button><div class="lightbox-body"></div><div class="lightbox-caption"></div>`;
+box.innerHTML = `<button type="button" class="lightbox-close" aria-label="Close">×</button>
+  <button type="button" class="lightbox-nav lightbox-prev" aria-label="Previous image">${CHEVRON_L}</button>
+  <div class="lightbox-body"></div>
+  <button type="button" class="lightbox-nav lightbox-next" aria-label="Next image">${CHEVRON_R}</button>
+  <div class="lightbox-caption"></div>`;
 document.body.appendChild(box);
 const boxBody = box.querySelector(".lightbox-body");
 const boxCap = box.querySelector(".lightbox-caption");
 let lastFocus = null;
+let shots = [], shotAt = 0, shotTitle = "";   /* images of the open project (card image + gallery) */
 
+function showShot(i) {
+  shotAt = (i + shots.length) % shots.length;
+  boxBody.innerHTML = `<img src="images/${shots[shotAt]}" alt="${shotTitle}, image ${shotAt + 1} of ${shots.length}">`;
+  boxCap.textContent = shots.length > 1 ? `${shotTitle} – ${shotAt + 1} / ${shots.length}` : shotTitle;
+}
 function openViewer(card) {
-  const { title, image, video, model } = card.dataset;
-  boxBody.innerHTML = model
-    ? `<model-viewer class="lightbox-model" src="models/${model}" alt="${title}" camera-controls auto-rotate shadow-intensity="1" touch-action="none"></model-viewer>`
-    : video
-    ? `<video src="animation/${video}" ${image ? `poster="images/${image}"` : ""} controls autoplay loop playsinline></video>`
-    : `<img src="images/${image}" alt="${title}">`;
-  boxCap.textContent = model ? `${title} – drag to rotate, scroll or pinch to zoom` : title;
+  const { title, image, video, model, gallery } = card.dataset;
+  shots = !model && !video ? [image, ...(gallery ? gallery.split("|") : [])].filter(Boolean) : [];
+  shotTitle = title;
+  box.classList.toggle("has-nav", shots.length > 1);
+  if (shots.length) showShot(0);
+  else {
+    boxBody.innerHTML = model
+      ? `<model-viewer class="lightbox-model" src="models/${model}" alt="${title}" camera-controls auto-rotate shadow-intensity="1" touch-action="none"></model-viewer>`
+      : `<video src="animation/${video}" ${image ? `poster="images/${image}"` : ""} controls autoplay loop playsinline></video>`;
+    boxCap.textContent = model ? `${title} – drag to rotate, scroll or pinch to zoom` : title;
+  }
   lastFocus = card;
   box.classList.add("open");
   document.body.style.overflow = "hidden";
-  box.querySelector(".lightbox-close").focus();
+  box.querySelector(shots.length > 1 ? ".lightbox-next" : ".lightbox-close").focus();
 }
 function closeViewer() {
   box.classList.remove("open");
@@ -426,10 +440,16 @@ document.addEventListener("click", (e) => {
   if (e.target.closest(".tags")) { e.preventDefault(); return; }   /* the tool capsules are labels, not buttons */
   const card = e.target.closest(".card--open");
   if (card) return openViewer(card);
-  if (box.classList.contains("open") && (e.target === box || e.target.closest(".lightbox-close"))) closeViewer();
+  if (!box.classList.contains("open")) return;
+  if (e.target.closest(".lightbox-prev")) return showShot(shotAt - 1);
+  if (e.target.closest(".lightbox-next")) return showShot(shotAt + 1);
+  if (e.target === box || e.target.closest(".lightbox-close")) closeViewer();
 });
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && box.classList.contains("open")) closeViewer();
+  if (!box.classList.contains("open")) return;
+  if (e.key === "Escape") closeViewer();
+  else if (shots.length > 1 && e.key === "ArrowLeft") showShot(shotAt - 1);
+  else if (shots.length > 1 && e.key === "ArrowRight") showShot(shotAt + 1);
 });
 
 /* ---------- Band and contact ---------- */

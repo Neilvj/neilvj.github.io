@@ -94,7 +94,8 @@ const SITE = {
     "PLA":       "An easy-to-print, plant-based plastic filament.",
     "PETG":      "A tougher, more heat- and moisture-resistant filament.",
     "Scan":      "A 3D scan: a real object captured digitally.",
-    "OrcaSlicer":"The slicer that turns a 3D model into printer instructions."
+    "OrcaSlicer":"The slicer that turns a 3D model into printer instructions.",
+    "Creality Print":"The slicer that turns a 3D model into printer instructions."
   },
 
   // Shown in an empty project section (for example Personal Projects)
