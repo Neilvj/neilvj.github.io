@@ -6,6 +6,7 @@
    video: (optional) file name inside the animation/ folder. Clicking the card plays it.
    model: (optional) .glb file name inside the models/ folder. Clicking the card opens a 3D view
           the visitor can rotate and zoom. With image left as "" the card shows the model itself.
+   camera: (optional) camera used for a scan. Shown as one more white capsule after the tags.
    link:  (optional) page or PDF to open when clicked instead of the viewer
    An empty personal list shows the "Coming soon" box (text is in config.js).
 
@@ -74,7 +75,8 @@ const PROJECTS = {
           text: "Scanned and compiled with RealityScan and Blender. Click to rotate and zoom.",
           tags: ["Scan", "RealityScan", "Blender"],
           image: "",
-          model: "Perisphinctes.glb"
+          model: "Perisphinctes.glb",
+          camera: "Sony Xperia 1 VII"
         }
       ]
     }

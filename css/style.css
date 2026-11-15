@@ -221,7 +221,7 @@ p { margin: 0; color: var(--color-text-soft); }
 .card:hover .card-arrow { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 .card h3 { font-size: var(--size-h3); }
 .card p { font-size: var(--size-small); }
-.tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+.tags { display: flex; flex-wrap: wrap; gap: .4rem; cursor: default; }
 .tag { font-size: .75rem; padding: .2rem .7rem; border-radius: var(--radius-pill); background: var(--color-tag-bg); color: var(--color-text); }
 
 /* Groups inside a project section (for example CAD and Scanning): text buttons, cards slide sideways */
@@ -417,7 +417,7 @@ button.btn { cursor: pointer; font: inherit; font-size: .95rem; }
 }
 
 /* ---------- Tag tooltips ---------- */
-.tag[data-tip] { position: relative; cursor: help; }
+.tag[data-tip] { position: relative; }
 .tag[data-tip]::after {
   content: attr(data-tip); position: absolute; left: 0; bottom: calc(100% + 8px); z-index: 5;
   width: max-content; max-width: 14rem; padding: .5rem .7rem; border-radius: 10px;

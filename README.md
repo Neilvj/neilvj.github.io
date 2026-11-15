@@ -16,7 +16,7 @@ Personal portfolio for internship (LIA) and job applications in additive manufac
 
 1. Put the image in `images/` (JPG, ideally around 1600 px wide).
 2. Add a block to the `school` or `personal` list in `js/projects.js`, copying an existing one:
-   `title`, `text`, `tags`, `image`, and optionally `video` (file in `animation/`).
+   `title`, `text`, `tags`, `image`, and optionally `video` (file in `animation/`), `model` (.glb file in `models/`, opens a 3D view) or `camera` (for scans, shown as one more capsule after the tags).
 3. Upload the image and the changed file to GitHub.
 
 School Projects is split into groups (CAD, Scanning) shown as text buttons above the cards. The first group shows first; clicking another button slides its cards in. In `js/projects.js` each one is a `group` with its own `projects` list; copy a whole group block to add a button.

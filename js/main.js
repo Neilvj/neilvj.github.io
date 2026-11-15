@@ -257,7 +257,8 @@ function cardHtml(p) {
     const tip = (SITE.tagInfo || {})[t];
     return `<span class="tag"${tip ? ` data-tip="${esc(tip)}"` : ""}>${esc(t)}</span>`;
   }).join("");
-  const inner = `<div class="card-img">${img}${arrow}</div><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p><div class="tags">${tags}</div>`;
+  const camera = p.camera ? `<span class="tag" data-tip="The camera used for this scan.">${esc(p.camera)}</span>` : "";
+  const inner = `<div class="card-img">${img}${arrow}</div><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p><div class="tags">${tags}${camera}</div>`;
   if (p.link) return `<a class="card reveal" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>`;
   if (p.image || p.video || p.model) {
     return `<button type="button" class="card card--open reveal" data-title="${esc(p.title)}" data-image="${esc(p.image || "")}" data-video="${esc(p.video || "")}" data-model="${esc(p.model || "")}">${inner}</button>`;
@@ -422,6 +423,7 @@ function closeViewer() {
   if (lastFocus) lastFocus.focus();
 }
 document.addEventListener("click", (e) => {
+  if (e.target.closest(".tags")) { e.preventDefault(); return; }   /* the tool capsules are labels, not buttons */
   const card = e.target.closest(".card--open");
   if (card) return openViewer(card);
   if (box.classList.contains("open") && (e.target === box || e.target.closest(".lightbox-close"))) closeViewer();
