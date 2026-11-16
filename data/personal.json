@@ -32,5 +32,19 @@
     "model": "",
     "video": "",
     "camera": ""
+  },
+  {
+    "title": "Keytabs",
+    "text": "Keytabs for d12 keys.",
+    "tags": [
+      "Fusion",
+      "Creality Print",
+      "FDM"
+    ],
+    "image": "keytabs.jpg",
+    "gallery": [],
+    "model": "",
+    "video": "",
+    "camera": ""
   }
 ]
