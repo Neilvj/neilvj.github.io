@@ -1,0 +1,145 @@
+# Pages CMS settings (app.pagescms.org). Defines the "Add project" forms and the upload folders.
+media:
+  - name: images
+    label: Images
+    input: images
+    output: /images
+    extensions: [jpg, jpeg, png, webp]
+  - name: models
+    label: 3D models
+    input: models
+    output: /models
+    extensions: [glb]
+  - name: animation
+    label: Videos
+    input: animation
+    output: /animation
+    extensions: [mp4, webm]
+
+content:
+  - name: cad
+    label: School projects - CAD
+    type: file
+    path: data/cad.json
+    format: json
+    list: true
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: text
+        label: Short description
+        type: text
+      - name: tags
+        label: Tool tags (one per line, e.g. Fusion, Creality Print, FDM)
+        type: string
+        list: true
+      - name: image
+        label: Card image (thumbnail)
+        type: image
+        options:
+          media: images
+      - name: gallery
+        label: Extra images (shown with arrows when the card is clicked)
+        type: image
+        options:
+          media: images
+          multiple: true
+      - name: model
+        label: 3D model (.glb) - clicking the card opens the rotate and zoom view
+        type: file
+        options:
+          media: models
+      - name: video
+        label: Video (.mp4)
+        type: file
+        options:
+          media: animation
+      - name: camera
+        label: Camera used (scans only)
+        type: string
+  - name: scanning
+    label: School projects - Scanning
+    type: file
+    path: data/scanning.json
+    format: json
+    list: true
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: text
+        label: Short description
+        type: text
+      - name: tags
+        label: Tool tags (one per line, e.g. Fusion, Creality Print, FDM)
+        type: string
+        list: true
+      - name: image
+        label: Card image (thumbnail)
+        type: image
+        options:
+          media: images
+      - name: gallery
+        label: Extra images (shown with arrows when the card is clicked)
+        type: image
+        options:
+          media: images
+          multiple: true
+      - name: model
+        label: 3D model (.glb) - clicking the card opens the rotate and zoom view
+        type: file
+        options:
+          media: models
+      - name: video
+        label: Video (.mp4)
+        type: file
+        options:
+          media: animation
+      - name: camera
+        label: Camera used (scans only)
+        type: string
+  - name: personal
+    label: Personal projects
+    type: file
+    path: data/personal.json
+    format: json
+    list: true
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: text
+        label: Short description
+        type: text
+      - name: tags
+        label: Tool tags (one per line, e.g. Fusion, Creality Print, FDM)
+        type: string
+        list: true
+      - name: image
+        label: Card image (thumbnail)
+        type: image
+        options:
+          media: images
+      - name: gallery
+        label: Extra images (shown with arrows when the card is clicked)
+        type: image
+        options:
+          media: images
+          multiple: true
+      - name: model
+        label: 3D model (.glb) - clicking the card opens the rotate and zoom view
+        type: file
+        options:
+          media: models
+      - name: video
+        label: Video (.mp4)
+        type: file
+        options:
+          media: animation
+      - name: camera
+        label: Camera used (scans only)
+        type: string
