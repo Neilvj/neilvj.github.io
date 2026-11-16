@@ -1,25 +1,12 @@
 [
   {
-    "title": "Grip handle with name",
-    "text": "Ribbed grip with an inlaid name, modeled in Fusion.",
+    "title": "Perfume bottle",
+    "text": "Faceted glass bottle with a wood cap and metal ring.",
     "tags": [
       "Fusion",
       "Render"
     ],
-    "image": "grip-handle.jpg",
-    "gallery": [],
-    "model": "",
-    "video": "",
-    "camera": ""
-  },
-  {
-    "title": "Propeller",
-    "text": "Three-blade propeller with a smooth hub, modeled in Fusion.",
-    "tags": [
-      "Fusion",
-      "Render"
-    ],
-    "image": "propeller.jpg",
+    "image": "perfume-bottle.jpg",
     "gallery": [],
     "model": "",
     "video": "",
@@ -39,13 +26,39 @@
     "camera": ""
   },
   {
-    "title": "Perfume bottle",
-    "text": "Faceted glass bottle with a wood cap and metal ring.",
+    "title": "Phone case",
+    "text": "Bumper-style case with cut-outs for buttons and ports.",
     "tags": [
       "Fusion",
       "Render"
     ],
-    "image": "perfume-bottle.jpg",
+    "image": "phone-case.jpg",
+    "gallery": [],
+    "model": "",
+    "video": "",
+    "camera": ""
+  },
+  {
+    "title": "Propeller",
+    "text": "Three-blade propeller with a smooth hub, modeled in Fusion.",
+    "tags": [
+      "Fusion",
+      "Render"
+    ],
+    "image": "propeller.jpg",
+    "gallery": [],
+    "model": "",
+    "video": "",
+    "camera": ""
+  },
+  {
+    "title": "Grip handle with name",
+    "text": "Ribbed grip with an inlaid name, modeled in Fusion.",
+    "tags": [
+      "Fusion",
+      "Render"
+    ],
+    "image": "grip-handle.jpg",
     "gallery": [],
     "model": "",
     "video": "",
@@ -59,19 +72,6 @@
       "Render"
     ],
     "image": "gingerbread-house.jpg",
-    "gallery": [],
-    "model": "",
-    "video": "",
-    "camera": ""
-  },
-  {
-    "title": "Phone case",
-    "text": "Bumper-style case with cut-outs for buttons and ports.",
-    "tags": [
-      "Fusion",
-      "Render"
-    ],
-    "image": "phone-case.jpg",
     "gallery": [],
     "model": "",
     "video": "",
