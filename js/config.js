@@ -1,6 +1,10 @@
 /* =====================================================================
    SITE TEXT  -  your name, bio, jobs, education and contact details.
    Edit the text between the quotes. (Colors and sizes are in css/theme.css)
+
+   NOTE: the admin app (neilvj.github.io/admin, "Site" tab) saves its changes in data/site.js.
+   A setting listed in data/site.js wins over the same setting here. If a change you make
+   here does not show on the site, that setting was last changed in the admin app: change it there.
    ===================================================================== */
 
 const SITE = {
@@ -77,6 +81,9 @@ const SITE = {
     // Discord: paste EITHER a link (https://discord.com/users/YOUR_ID or a server invite)
     // OR just your username (then visitors get a button that copies it). "" hides it.
     discord:  "https://discord.com/users/1568963967424921600",
+    // Extra buttons in the Contact section, same look as LinkedIn. Example:
+    // links: [ { label: "Printables", url: "https://www.printables.com/@yourname" } ],
+    links: [],
 
     // Message popup sends straight to your inbox if you paste a free access key from
     // web3forms.com (enter neilvj.inbox@gmail.com there, they email you the key).

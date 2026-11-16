@@ -70,8 +70,8 @@
       return f.sha;
     }
 
-    /** files: [{ path, blob }]. One commit with everything, so the site never shows half an update. */
-    async commit(files, message, onStep) {
+    /** files: [{ path, blob }], deletes: [path]. One commit with everything, so the site never shows half an update. */
+    async commit(files, message, onStep, deletes) {
       const base = "/repos/" + OWNER + "/" + REPO;
       const step = onStep || function () {};
       step("Reading the latest version…");
@@ -86,6 +86,7 @@
         const blob = await this.req(base + "/git/blobs", { method: "POST", body: { content: await toBase64(f.blob), encoding: "base64" } });
         entries.push({ path: f.path, mode: "100644", type: "blob", sha: blob.sha });
       }
+      (deletes || []).forEach((p) => entries.push({ path: p, mode: "100644", type: "blob", sha: null }));
       step("Saving the update…");
       const tree = await this.req(base + "/git/trees", { method: "POST", body: { base_tree: head.tree.sha, tree: entries } });
       const commit = await this.req(base + "/git/commits", { method: "POST", body: { message: message, tree: tree.sha, parents: [headSha] } });

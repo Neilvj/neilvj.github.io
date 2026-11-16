@@ -8,11 +8,21 @@ Personal portfolio for internship (LIA) and job applications in additive manufac
 | --- | --- |
 | Colours, font sizes, spacing, positions, grid columns, image filter, 3D viewer background | `css/theme.css` (the master list) |
 | Name, role, About text and the intern section (both in English and Swedish), experience, education, contact details, CV file name | `js/config.js` |
-| School Projects and Personal Projects | Pages CMS (see below), stored in `data/cad.json`, `data/scanning.json`, `data/personal.json` |
-| Which list shows where, and group button names | `js/projects.js` |
+| School Projects and Personal Projects | Admin app or Pages CMS (see below), stored in `data/cad.json`, `data/scanning.json`, `data/personal.json` |
+| Which list shows where, and group button names | Admin app (add, rename or delete a page), stored in `js/projects.js` |
+| Photo, logo, CV, hero text, bio and contact buttons, from the phone | Admin app, "Site" tab, stored in `data/site.js` |
 | Pages CMS forms and upload folders | `.pages.yml` |
 | Page structure | `index.html` |
 | Layout rules (rarely needs touching) | `css/style.css` |
+
+## Admin app
+
+`https://neilvj.github.io/admin/` is a small app for the phone or computer (it can be installed to the home screen). Log in with a GitHub token that has Contents: Read and write for this repository.
+
+- **School projects / Personal projects:** add, edit, reorder and delete projects. The text buttons above the cards (CAD, Scanning) are called pages: "+ Page" adds one, and "Rename page" and "Delete page" change the open one. Adding a page creates its `data/<name>.json`, adds it to `js/projects.js` and adds its form to `.pages.yml`.
+- **Site:** hero text and numbers, About photo and text (English and Swedish), logo, CV, and the buttons in the Contact section.
+
+Site changes are saved in `data/site.js`. A setting listed there wins over the same setting in `js/config.js`. Everything else (experience, education, the intern section, tag tooltips) is still edited in `js/config.js`.
 
 ## Adding a project (Pages CMS)
 
@@ -35,7 +45,7 @@ All project images show in black and white until clicked. This is set by `--card
 
 ## Replacing the CV
 
-Put the new PDF in `documents/` and keep the file name `Neil-Ramnarine-CV.pdf`, or change `cv` in `js/config.js`.
+Use the admin app (Site tab, Logo and CV). By hand: put the new PDF in `documents/` and keep the file name `Neil-Ramnarine-CV.pdf`, or change `cv` in `js/config.js`.
 
 ## Contact form
 
@@ -49,7 +59,8 @@ Upload the files to the GitHub repository. GitHub Pages republishes automaticall
 
 - `css/` styles
 - `js/` content and behaviour
-- `data/` project lists (edited through Pages CMS)
+- `data/` project lists (edited in the admin app or Pages CMS) and `site.js` (changes made in the admin app's Site tab)
+- `admin/` the admin app (not linked from the site)
 - `tools/` Blender add-on for scans (not used by the site itself)
 - `images/` renders, portrait, logo, favicon, share preview
 - `animation/` project videos

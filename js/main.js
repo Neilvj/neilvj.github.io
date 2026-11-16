@@ -1,5 +1,15 @@
 /* Builds the page from config.js and the project lists in data/ (see projects.js), plus menu and scroll effects. */
 
+/* Text and pictures changed in the admin app are saved in data/site.js. They are laid over config.js here,
+   so a setting that is listed in data/site.js wins over the same setting in config.js. */
+(function overlay(to, from) {
+  Object.keys(from || {}).forEach((k) => {
+    const v = from[k];
+    if (v && typeof v === "object" && !Array.isArray(v) && to[k] && typeof to[k] === "object" && !Array.isArray(to[k])) overlay(to[k], v);
+    else to[k] = v;
+  });
+})(SITE, typeof SITE_EDITS === "object" && SITE_EDITS ? SITE_EDITS : {});
+
 const $ = (sel) => document.querySelector(sel);
 
 function esc(s) {
@@ -399,7 +409,7 @@ function buildSection(el, list, label) {
   window.addEventListener("load", fit);
   show(0);
 }
-/* Projects are read from the JSON files listed in projects.js (edited through Pages CMS). */
+/* Projects are read from the JSON files listed in projects.js (edited in the admin app or Pages CMS). */
 async function loadList(file) {
   try {
     const r = await fetch(file, { cache: "no-cache" });
@@ -497,6 +507,12 @@ if (dc) {
     ? `<a class="btn btn--line" href="${esc(dc)}" target="_blank" rel="noopener">Discord ↗</a>`
     : `<button type="button" class="btn btn--line" data-copy="${esc(dc)}">Discord: ${esc(dc)}</button>`);
 }
+/* Extra buttons added in the admin app (label + web address), same look as LinkedIn */
+(Array.isArray(SITE.contact.links) ? SITE.contact.links : []).forEach((l) => {
+  if (l && l.label && /^https?:\/\//i.test(String(l.url || "").trim())) {
+    links.push(`<a class="btn btn--line" href="${esc(String(l.url).trim())}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`);
+  }
+});
 if (SITE.cv) {
   links.push(`<a class="btn btn--line" href="documents/${encodeURI(SITE.cv)}" download>${esc(SITE.cvLabel || "Download CV")}</a>`);
 }

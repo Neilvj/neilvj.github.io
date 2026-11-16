@@ -85,3 +85,21 @@ summary { cursor: pointer; font-weight: 500; padding: .4rem 0; }
 @media (min-width: 700px) { .overlay { align-items: center; } .sheet { border-radius: 18px; } }
 
 .newbtn { width: 100%; margin-bottom: .8rem; }
+
+/* Site tab */
+.tabs.three .tab { flex: 1 1 auto; font-size: .92rem; padding: 0 .5rem; white-space: nowrap; }
+.sec { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: .3rem .9rem .9rem; margin: 0 0 .7rem; }
+.sec > summary { font-size: 1.05rem; padding: .6rem 0; }
+.sec label:first-of-type { margin-top: .4rem; }
+.pair { display: flex; gap: .5rem; align-items: flex-start; margin-bottom: .5rem; }
+.pair > input, .pair > textarea { flex: 1; min-width: 0; }
+.pair > .narrow { flex: 0 0 5.2rem; }
+.pair > .icon { flex: none; margin-top: 3px; }
+.pair.stack { flex-wrap: wrap; }
+.pair.stack > input { flex: 1 1 100%; }
+.pair.stack > .grow { flex: 1 1 0; }
+.sub { font-size: .9rem; font-weight: 500; margin: 1.1rem 0 .4rem; }
+.preview.small { max-width: 180px; max-height: 180px; object-fit: contain; }
+.preview.logo { max-width: 160px; max-height: 80px; object-fit: contain; background: #fff; padding: .4rem; }
+.linkrow { display: flex; flex-wrap: wrap; gap: .2rem .8rem; margin: -.3rem 0 .6rem; }
+.sec textarea { min-height: 130px; }
