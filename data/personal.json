@@ -38,11 +38,14 @@
     "text": "Keytabs for d12 keys.",
     "tags": [
       "Fusion",
-      "Creality Print",
-      "FDM"
+      "FDM",
+      "OrcaSlicer"
     ],
-    "image": "keytabs.jpg",
-    "gallery": [],
+    "image": "keytabs-2.jpg",
+    "gallery": [
+      "keytabs.jpg",
+      "keytabs-3.jpg"
+    ],
     "model": "",
     "video": "",
     "camera": ""
