@@ -1,15 +1,18 @@
-/* Reads and writes js/projects.js. Keeps the long comment block at the top exactly as it is
-   and writes the list back in the same style you would type by hand. */
+/* Reads the section list in js/projects.js (read only) and reads and writes the project lists
+   in data/*.json, in the same layout Pages CMS uses, so both tools can edit the same files. */
 (function (root) {
   "use strict";
-  const MARK = "const PROJECTS =";
-  const FIELD_ORDER = ["title", "text", "tags", "image", "video", "model", "camera", "gallery", "link"];
+  const MARK = "const PROJECT_SECTIONS =";
+  /* Same fields, in the same order, as the forms in .pages.yml. "link" is extra: the site supports it, the forms do not list it. */
+  const FIELD_ORDER = ["title", "text", "tags", "image", "gallery", "model", "video", "camera"];
+  const LIST_FIELDS = ["tags", "gallery"];
+  const FILE_RE = /^data\/[A-Za-z0-9_-]+\.json$/;
 
-  /* A small reader for the JavaScript list in projects.js (objects, lists, text, numbers, comments).
+  /* A small reader for the JavaScript section list in projects.js (objects, lists, text, numbers, comments).
      It never runs the file as code, and it stops with a clear message if something unexpected is in there. */
   function parseLiteral(s) {
     let i = 0;
-    const fail = (m) => { throw new Error(m + " (character " + i + " of the project list)"); };
+    const fail = (m) => { throw new Error(m + " (character " + i + " of the section list)"); };
     function ws() {
       for (;;) {
         while (i < s.length && /\s/.test(s[i])) i++;
@@ -77,55 +80,55 @@
     return v;
   }
 
-  function parse(src) {
+  /** Reads PROJECT_SECTIONS from js/projects.js: { school: [{ group, file }], personal: [{ file }] }. */
+  function parseSections(src) {
     const i = src.indexOf(MARK);
-    if (i < 0) throw new Error("Could not find 'const PROJECTS =' in js/projects.js");
+    if (i < 0) throw new Error("Could not find 'const PROJECT_SECTIONS =' in js/projects.js");
     const data = parseLiteral(src.slice(i + MARK.length));
-    if (!data || typeof data !== "object" || !Array.isArray(data.school) || !Array.isArray(data.personal)) {
-      throw new Error("projects.js must contain a school list and a personal list");
-    }
-    return { header: src.slice(0, i), data };
-  }
-
-  const isIdent = (k) => /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(k);
-  const isStringArray = (v) => Array.isArray(v) && v.every((x) => typeof x === "string");
-  const pad = (n) => "  ".repeat(n);
-
-  function ser(v, depth) {
-    if (typeof v === "string") return JSON.stringify(v);
-    if (typeof v === "number" || typeof v === "boolean" || v === null) return String(v);
-    if (Array.isArray(v)) {
-      if (v.length === 0) return "[]";
-      if (isStringArray(v)) return "[" + v.map((s) => JSON.stringify(s)).join(", ") + "]";
-      return "[\n" + v.map((x) => pad(depth + 1) + ser(x, depth + 1)).join(",\n") + "\n" + pad(depth) + "]";
-    }
-    const keys = Object.keys(v).filter((k) => v[k] !== undefined);
-    if (keys.length === 0) return "{}";
-    return "{\n" + keys.map((k) => pad(depth + 1) + (isIdent(k) ? k : JSON.stringify(k)) + ": " + ser(v[k], depth + 1)).join(",\n") + "\n" + pad(depth) + "}";
-  }
-
-  function stringify(header, data) {
-    const keys = Object.keys(data);
-    const parts = keys.map((k) => pad(1) + k + ": " + ser(data[k], 1));
-    return header + MARK + " {\n\n" + parts.join(",\n\n") + "\n};\n";
-  }
-
-  /** Builds a project object with fields in the usual order and empty optional fields left out. */
-  function cleanProject(p) {
     const out = {};
-    FIELD_ORDER.forEach((k) => {
-      let v = p[k];
-      if (k === "tags") v = (v || []).filter(Boolean);
-      if (k === "gallery") v = (v || []).filter(Boolean);
-      const optional = ["video", "model", "camera", "gallery", "link"].includes(k);
-      if (optional && (v === undefined || v === "" || (Array.isArray(v) && v.length === 0))) return;
-      if (v === undefined) v = k === "tags" || k === "gallery" ? [] : "";
-      out[k] = v;
+    ["school", "personal"].forEach((k) => {
+      const sec = data && data[k];
+      if (!Array.isArray(sec) || sec.length === 0) throw new Error("js/projects.js must list at least one file under '" + k + "'");
+      out[k] = sec.map((g) => {
+        if (!g || typeof g.file !== "string" || !FILE_RE.test(g.file)) throw new Error("js/projects.js: every list under '" + k + "' needs a file like data/name.json");
+        return { group: typeof g.group === "string" ? g.group : "", file: g.file };
+      });
+      if (sec.length > 1 && out[k].some((g) => !g.group)) throw new Error("js/projects.js: when '" + k + "' has several lists, each one needs a group name");
     });
     return out;
   }
 
-  const api = { parse, stringify, cleanProject, FIELD_ORDER };
+  /** Reads one data/*.json file. It must be a list of projects. */
+  function parseList(text, file) {
+    let list;
+    try { list = JSON.parse(text.replace(/^﻿/, "")); }
+    catch (e) { throw new Error(file + " is not valid JSON: " + e.message); }
+    if (!Array.isArray(list)) throw new Error(file + " must contain a list of projects ([ ... ])");
+    list.forEach((p, n) => {
+      if (!p || typeof p !== "object" || Array.isArray(p)) throw new Error(file + ": entry " + (n + 1) + " is not a project");
+    });
+    return list;
+  }
+
+  /** Writes a list the way Pages CMS does: two-space indent, one line break at the end. */
+  function stringifyList(list) { return JSON.stringify(list, null, 2) + "\n"; }
+
+  /** Builds a project with every form field present and in the usual order.
+      "link" is written only when filled in. Fields this app does not know are kept as they are. */
+  function cleanProject(p) {
+    const out = {};
+    FIELD_ORDER.forEach((k) => {
+      let v = p[k];
+      if (LIST_FIELDS.includes(k)) v = (Array.isArray(v) ? v : (v ? [v] : [])).map((x) => String(x).trim()).filter(Boolean);
+      else v = v === undefined || v === null ? "" : String(v);
+      out[k] = v;
+    });
+    if (typeof p.link === "string" && p.link.trim()) out.link = p.link.trim();
+    Object.keys(p).forEach((k) => { if (!(k in out) && k !== "link" && k !== "__proto__") out[k] = p[k]; });
+    return out;
+  }
+
+  const api = { parseSections, parseList, stringifyList, cleanProject, FIELD_ORDER };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.ProjectsIO = api;
 })(typeof window !== "undefined" ? window : globalThis);

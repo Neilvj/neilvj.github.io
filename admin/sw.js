@@ -1,6 +1,6 @@
 /* Keeps the admin app opening fast and installable. Online it always fetches the newest files;
    offline it falls back to the saved copy. It never touches GitHub requests. */
-const CACHE = "admin-v1";
+const CACHE = "admin-v2";
 const SHELL = ["./", "index.html", "admin.css", "projects-io.js", "gh.js", "app.js", "manifest.json", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", (e) => {

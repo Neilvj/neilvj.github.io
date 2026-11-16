@@ -1,14 +1,16 @@
-/* Portfolio admin. Edits js/projects.js and uploads photos, videos and 3D models to the repo.
+/* Portfolio admin. Edits the project lists in data/*.json (the same files Pages CMS edits) and uploads
+   photos, videos and 3D models to the repo. Which lists exist is read from js/projects.js.
    Runs only in your browser; the GitHub token never leaves your phone except to talk to api.github.com. */
 (function () {
   "use strict";
   const IO = window.ProjectsIO, GH = window.GH, CFG = window.GH_CONFIG;
   const TOKEN_KEY = "portfolio_admin_token";
-  const PROJECTS_PATH = "js/projects.js";
+  const SECTIONS_PATH = "js/projects.js";
   const MAX_FILE_MB = 90;
 
   const app = document.getElementById("app");
-  const S = { gh: null, header: "", data: null, loadedSha: "", files: new Set(), pending: new Map(), changes: [], tab: "school", group: 0, reformat: false };
+  /* S.data = { school: [list, ...], personal: [list] }, each list = { group, file, sha, loaded, projects } */
+  const S = { gh: null, data: null, files: new Set(), pending: new Map(), changes: [], tab: "school", group: 0 };
 
   /* ---------- tiny helpers ---------- */
   function h(tag, props) {
@@ -38,7 +40,8 @@
   const clearToken = () => { try { localStorage.removeItem(TOKEN_KEY); } catch (e) { /* ignore */ } };
   const fmtBytes = (n) => (n >= 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB");
   const slug = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-  const grouped = (arr) => arr.length > 0 && Array.isArray(arr[0].projects);
+  const grouped = (sec) => sec.length > 1 || !!sec[0].group;
+  const allLists = () => S.data.school.concat(S.data.personal);
   const dirty = () => S.changes.length > 0;
 
   function overlay(content, center) {
@@ -72,15 +75,12 @@
 
   /* ---------- data helpers ---------- */
   function eachProject(fn) {
-    ["school", "personal"].forEach((k) => {
-      const sec = S.data[k];
-      if (grouped(sec)) sec.forEach((g) => g.projects.forEach(fn)); else sec.forEach(fn);
-    });
+    allLists().forEach((l) => l.projects.forEach(fn));
   }
   function curList() {
     const sec = S.data[S.tab];
-    if (grouped(sec)) { if (S.group >= sec.length) S.group = 0; return sec[S.group].projects; }
-    return sec;
+    if (S.group >= sec.length) S.group = 0;
+    return sec[S.group].projects;
   }
   function referencedPaths() {
     const set = new Set();
@@ -150,11 +150,16 @@
     app.replaceChildren(h("p", { class: "boot", text: "Loading your projects…" }));
     try {
       await S.gh.checkAccess();
-      const [f, files] = await Promise.all([S.gh.getText(PROJECTS_PATH), S.gh.listFiles()]);
-      const parsed = IO.parse(f.text);
-      S.header = parsed.header; S.data = parsed.data; S.loadedSha = f.sha;
+      const [f, files] = await Promise.all([S.gh.getText(SECTIONS_PATH), S.gh.listFiles()]);
+      const data = IO.parseSections(f.text);
+      await Promise.all(data.school.concat(data.personal).map(async (l) => {
+        if (!files.includes(l.file)) throw new Error("js/projects.js points to " + l.file + ", but that file is not in the repo.");
+        const t = await S.gh.getText(l.file);
+        l.projects = IO.parseList(t.text, l.file);
+        l.sha = t.sha; l.loaded = JSON.stringify(l.projects);
+      }));
+      S.data = data;
       S.files = new Set(files); S.pending = new Map(); S.changes = [];
-      S.reformat = IO.stringify(parsed.header, parsed.data) !== f.text;
       S.tab = "school"; S.group = 0;
       render();
     } catch (e) {
@@ -184,12 +189,8 @@
     let chips = null;
     if (isGrouped) {
       chips = h("div", { class: "chips" },
-        sec.map((g, i) => h("button", { class: "chip", "aria-selected": String(i === S.group), text: g.group + " (" + g.projects.length + ")", onclick: () => { S.group = i; render(); } })),
-        h("button", { class: "chip add", text: "+ Group", onclick: addGroup }));
+        sec.map((g, i) => h("button", { class: "chip", "aria-selected": String(i === S.group), text: g.group + " (" + g.projects.length + ")", onclick: () => { S.group = i; render(); } })));
     }
-    const groupTools = isGrouped ? h("div", { class: "chips" },
-      h("button", { class: "link", text: "Rename group", onclick: renameGroup }),
-      h("button", { class: "link", text: "Delete group", onclick: deleteGroup })) : null;
 
     const rows = list.length ? list.map((p, i) => row(p, i, list)) : [h("p", { class: "empty", text: "No projects here yet." })];
 
@@ -199,8 +200,7 @@
         h("a", { class: "link", href: CFG.SITE, target: "_blank", rel: "noopener", text: "View site" }),
         h("button", { class: "link", text: "Log out", onclick: logout })),
       h("div", { class: "wrap" },
-        S.reformat ? h("p", { class: "note warn", text: "js/projects.js is formatted a little differently from what this app writes. The first publish will tidy the layout; the content stays the same." }) : null,
-        tabs, chips, groupTools,
+        tabs, chips,
         h("button", { class: "btn newbtn", text: "+ New project", onclick: () => openEditor(null) }), rows),
       h("div", { class: "publish" },
         h("span", { class: "count", text: dirty() ? S.changes.length + " unpublished change" + (S.changes.length > 1 ? "s" : "") : "Everything is published" }),
@@ -219,25 +219,6 @@
     const t = list[i]; list[i] = list[i + d]; list[i + d] = t;
     log("Reordered: " + t.title); render();
   }
-  async function addGroup() {
-    const name = await askText("New group", "", "Add");
-    if (!name) return;
-    S.data.school.push({ group: name, projects: [] });
-    S.group = S.data.school.length - 1; log("Added group: " + name); render();
-  }
-  async function renameGroup() {
-    const g = S.data[S.tab][S.group];
-    const name = await askText("Rename group", g.group, "Save");
-    if (!name || name === g.group) return;
-    log("Renamed group: " + g.group + " → " + name); g.group = name; render();
-  }
-  async function deleteGroup() {
-    const g = S.data[S.tab][S.group];
-    if (g.projects.length) { toast("Move or delete the projects in this group first."); return; }
-    if (!(await confirmBox("Delete group?", "Delete the empty group “" + g.group + "”?", "Delete", true))) return;
-    S.data[S.tab].splice(S.group, 1); S.group = 0; log("Deleted group: " + g.group); render();
-  }
-
   /* ---------- editor ---------- */
   function openEditor(idx) {
     const sec = S.data[S.tab];
@@ -245,7 +226,8 @@
     const list = curList();
     const existing = idx !== null ? list[idx] : null;
     const d = existing ? JSON.parse(JSON.stringify(existing)) : { title: "", text: "", tags: [], image: "" };
-    d.tags = d.tags || []; d.gallery = d.gallery || [];
+    const asList = (v) => (Array.isArray(v) ? v : (v ? [v] : [])).map(String);
+    d.title = String(d.title || ""); d.text = String(d.text || ""); d.tags = asList(d.tags); d.gallery = asList(d.gallery);
     let groupIdx = S.group;
     const added = [];
     let ov;
@@ -373,7 +355,7 @@
       if (!d.title.trim()) { showErr("Give the project a title."); title.focus(); return; }
       d.title = d.title.trim();
       const clean = IO.cleanProject(d);
-      const target = isGrouped ? sec[groupIdx].projects : sec;
+      const target = sec[isGrouped ? groupIdx : 0].projects;
       if (!existing) { target.push(clean); log("Added: " + clean.title); }
       else {
         const same = JSON.stringify(clean) === JSON.stringify(IO.cleanProject(existing));
@@ -416,15 +398,19 @@
       const progress = h("p", { class: "progress", text: "Starting…" });
       body.replaceChildren(h("h2", { text: "Publishing…" }), progress);
       try {
-        const sha = await S.gh.fileSha(PROJECTS_PATH);
-        if (sha !== S.loadedSha) throw Object.assign(new Error("js/projects.js was changed on GitHub after you opened this page (maybe from your computer). To avoid overwriting that, nothing was saved. Reload to get the latest version; your unpublished changes here will be lost."), { stale: true });
-        const text = IO.stringify(S.header, S.data);
-        const files = [{ path: PROJECTS_PATH, blob: new Blob([text], { type: "text/javascript" }) }]
+        const changed = allLists().filter((l) => JSON.stringify(l.projects) !== l.loaded);
+        for (const l of changed) {
+          const sha = await S.gh.fileSha(l.file);
+          if (sha !== l.sha) throw Object.assign(new Error(l.file + " was changed on GitHub after you opened this page (maybe in Pages CMS or from your computer). To avoid overwriting that, nothing was saved. Reload to get the latest version; your unpublished changes here will be lost."), { stale: true });
+        }
+        const files = changed.map((l) => ({ path: l.file, blob: new Blob([IO.stringifyList(l.projects)], { type: "application/json" }) }))
           .concat(upload.map(([p, v]) => ({ path: p, blob: v.blob })));
-        await S.gh.commit(files, msg, (m) => { progress.textContent = m; });
-        S.loadedSha = await S.gh.fileSha(PROJECTS_PATH);
-        upload.forEach(([p]) => S.files.add(p));
-        S.changes = []; S.reformat = false;
+        if (files.length) {
+          await S.gh.commit(files, msg, (m) => { progress.textContent = m; });
+          for (const l of changed) { l.sha = await S.gh.fileSha(l.file); l.loaded = JSON.stringify(l.projects); }
+          upload.forEach(([p]) => S.files.add(p));
+        }
+        S.changes = [];
         body.replaceChildren(
           h("h2", { class: "ok", text: "Published" }),
           h("p", { class: "note", text: "GitHub is updating the site. New content usually shows up within 1–2 minutes (refresh the page if you don't see it yet)." }),
