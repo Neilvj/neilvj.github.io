@@ -1,0 +1,93 @@
+[
+  {
+    "title": "Grip handle with name",
+    "text": "Ribbed grip with an inlaid name, modeled in Fusion.",
+    "tags": [
+      "Fusion",
+      "Render"
+    ],
+    "image": "grip-handle.jpg",
+    "gallery": [],
+    "model": "",
+    "video": "",
+    "camera": ""
+  },
+  {
+    "title": "Propeller",
+    "text": "Three-blade propeller with a smooth hub, modeled in Fusion.",
+    "tags": [
+      "Fusion",
+      "Render"
+    ],
+    "image": "propeller.jpg",
+    "gallery": [],
+    "model": "",
+    "video": "",
+    "camera": ""
+  },
+  {
+    "title": "Arch bridge",
+    "text": "Arch bridge with a truss structure between the arches.",
+    "tags": [
+      "Fusion",
+      "Render"
+    ],
+    "image": "arch-bridge.jpg",
+    "gallery": [],
+    "model": "",
+    "video": "",
+    "camera": ""
+  },
+  {
+    "title": "Perfume bottle",
+    "text": "Faceted glass bottle with a wood cap and metal ring.",
+    "tags": [
+      "Fusion",
+      "Render"
+    ],
+    "image": "perfume-bottle.jpg",
+    "gallery": [],
+    "model": "",
+    "video": "",
+    "camera": ""
+  },
+  {
+    "title": "Gingerbread house",
+    "text": "Small house with cut-out windows that let the light through.",
+    "tags": [
+      "Fusion",
+      "Render"
+    ],
+    "image": "gingerbread-house.jpg",
+    "gallery": [],
+    "model": "",
+    "video": "",
+    "camera": ""
+  },
+  {
+    "title": "Phone case",
+    "text": "Bumper-style case with cut-outs for buttons and ports.",
+    "tags": [
+      "Fusion",
+      "Render"
+    ],
+    "image": "phone-case.jpg",
+    "gallery": [],
+    "model": "",
+    "video": "",
+    "camera": ""
+  },
+  {
+    "title": "Playground structure",
+    "text": "Moving playground structure. Click to watch the animation.",
+    "tags": [
+      "Fusion",
+      "Animation"
+    ],
+    "image": "playground-swing.jpg",
+    "gallery": [],
+    "model": "",
+    "video": "playground-animation.mp4",
+    "camera": ""
+  }
+]

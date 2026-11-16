@@ -1,4 +1,4 @@
-/* Builds the page from config.js and projects.js, plus menu and scroll effects. */
+/* Builds the page from config.js and the project lists in data/ (see projects.js), plus menu and scroll effects. */
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -240,16 +240,26 @@ if (SITE.aboutBanner) {
 /* ---------- Projects (pages of cards with arrows) ---------- */
 /* 3D models (.glb in models/) are shown with Google's <model-viewer>. It is only loaded when a project uses one. */
 const allProjects = (list) => list.flatMap((x) => (x && x.projects ? x.projects : [x]));
-if ([...allProjects(PROJECTS.school), ...allProjects(PROJECTS.personal)].some((p) => p.model)) {
+function loadModelViewer() {
+  if (document.querySelector("script[data-mv]")) return;
   const mv = document.createElement("script");
   mv.type = "module";
+  mv.dataset.mv = "1";
   mv.src = "https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js";
   document.head.appendChild(mv);
 }
+/* File references can be a bare name ("propeller.jpg") or a path saved by Pages CMS ("/images/propeller.jpg").
+   Both end up as a path relative to the site, e.g. "images/propeller.jpg". */
+function filePath(folder, v) {
+  if (!v) return "";
+  v = String(v).trim().replace(/^\.?\//, "");
+  return v.includes("/") ? v : folder + "/" + v;
+}
+const asList = (v) => (Array.isArray(v) ? v : v ? [v] : []).map((x) => (x && typeof x === "object" ? x.image || x.src || "" : x)).filter(Boolean);
 
 function cardHtml(p) {
-  const img = p.image ? `<img src="images/${esc(p.image)}" alt="${esc(p.title)}" loading="lazy">`
-    : p.model ? `<model-viewer class="card-model" src="models/${esc(p.model)}" alt="${esc(p.title)}" loading="lazy" interaction-prompt="none" tabindex="-1" aria-hidden="true"></model-viewer>`
+  const img = p.image ? `<img src="${esc(filePath("images", p.image))}" alt="${esc(p.title)}" loading="lazy">`
+    : p.model ? `<model-viewer class="card-model" src="${esc(filePath("models", p.model))}" alt="${esc(p.title)}" loading="lazy" interaction-prompt="none" tabindex="-1" aria-hidden="true"></model-viewer>`
     : `<div class="ph"></div>`;
   const icon = p.link ? "↗" : p.video ? "▶" : p.model ? "3D" : p.image ? "+" : "";
   const arrow = icon ? `<span class="card-arrow">${icon}</span>` : "";
@@ -261,7 +271,7 @@ function cardHtml(p) {
   const inner = `<div class="card-img">${img}${arrow}</div><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p><div class="tags">${tags}${camera}</div>`;
   if (p.link) return `<a class="card reveal" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>`;
   if (p.image || p.video || p.model) {
-    return `<button type="button" class="card card--open reveal" data-title="${esc(p.title)}" data-image="${esc(p.image || "")}" data-video="${esc(p.video || "")}" data-model="${esc(p.model || "")}" data-gallery="${esc((p.gallery || []).join("|"))}">${inner}</button>`;
+    return `<button type="button" class="card card--open reveal" data-title="${esc(p.title)}" data-image="${esc(filePath("images", p.image))}" data-video="${esc(filePath("animation", p.video))}" data-model="${esc(filePath("models", p.model))}" data-gallery="${esc(asList(p.gallery).map((g) => filePath("images", g)).join("|"))}">${inner}</button>`;
   }
   return `<div class="card reveal">${inner}</div>`;
 }
@@ -389,8 +399,30 @@ function buildSection(el, list, label) {
   window.addEventListener("load", fit);
   show(0);
 }
-buildSection($("#school-grid"), PROJECTS.school, "School projects");
-buildSection($("#personal-grid"), PROJECTS.personal, "Personal projects");
+/* Projects are read from the JSON files listed in projects.js (edited through Pages CMS). */
+async function loadList(file) {
+  try {
+    const r = await fetch(file, { cache: "no-cache" });
+    if (!r.ok) throw new Error(r.status);
+    const list = await r.json();
+    return (Array.isArray(list) ? list : []).filter((p) => p && p.title);
+  } catch (err) {
+    console.warn("Could not load " + file, err);
+    return [];
+  }
+}
+async function loadSection(groups) {
+  const lists = await Promise.all(groups.map((g) => loadList(g.file)));
+  if (groups.length === 1 && !groups[0].group) return lists[0];
+  return groups.map((g, i) => ({ group: g.group, projects: lists[i] }));
+}
+(async function () {
+  const [school, personal] = await Promise.all([loadSection(PROJECT_SECTIONS.school), loadSection(PROJECT_SECTIONS.personal)]);
+  if ([...allProjects(school), ...allProjects(personal)].some((p) => p.model)) loadModelViewer();
+  buildSection($("#school-grid"), school, "School projects");
+  buildSection($("#personal-grid"), personal, "Personal projects");
+  document.querySelectorAll("#school-grid .reveal, #personal-grid .reveal").forEach((n) => io.observe(n));
+})();
 
 /* ---------- Viewer (click a card to enlarge the image, play the video or open the 3D model) ---------- */
 const box = document.createElement("div");
@@ -410,7 +442,7 @@ let shots = [], shotAt = 0, shotTitle = "";   /* images of the open project (car
 
 function showShot(i) {
   shotAt = (i + shots.length) % shots.length;
-  boxBody.innerHTML = `<img src="images/${shots[shotAt]}" alt="${shotTitle}, image ${shotAt + 1} of ${shots.length}">`;
+  boxBody.innerHTML = `<img src="${shots[shotAt]}" alt="${shotTitle}, image ${shotAt + 1} of ${shots.length}">`;
   boxCap.textContent = shots.length > 1 ? `${shotTitle} – ${shotAt + 1} / ${shots.length}` : shotTitle;
 }
 function openViewer(card) {
@@ -421,8 +453,8 @@ function openViewer(card) {
   if (shots.length) showShot(0);
   else {
     boxBody.innerHTML = model
-      ? `<model-viewer class="lightbox-model" src="models/${model}" alt="${title}" camera-controls auto-rotate shadow-intensity="1" touch-action="none"></model-viewer>`
-      : `<video src="animation/${video}" ${image ? `poster="images/${image}"` : ""} controls autoplay loop playsinline></video>`;
+      ? `<model-viewer class="lightbox-model" src="${model}" alt="${title}" camera-controls auto-rotate shadow-intensity="1" touch-action="none"></model-viewer>`
+      : `<video src="${video}" ${image ? `poster="${image}"` : ""} controls autoplay loop playsinline></video>`;
     boxCap.textContent = model ? `${title} – drag to rotate, scroll or pinch to zoom` : title;
   }
   lastFocus = card;

@@ -2,21 +2,163 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#222222">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; connect-src https://api.github.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
-  <title>Portfolio admin</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icon-192.png">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="admin.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neil Ramnarine – 3D printing technology student | Portfolio</title>
+  <meta name="description" content="Portfolio of Neil Ramnarine, 3D printing technology student: school projects, personal projects and background.">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Neil Ramnarine">
+  <meta property="og:title" content="Neil Ramnarine – 3D printing technology student">
+  <meta property="og:description" content="Portfolio: school projects, personal projects and background in 3D printing and additive manufacturing.">
+  <meta property="og:url" content="https://neilvj.github.io/">
+  <meta property="og:image" content="https://neilvj.github.io/images/og-preview.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://neilvj.github.io/images/og-preview.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Loading screen: inline so it shows before the rest of the site arrives. Appears only if loading takes more than 0.4 s */
+    #loader { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: #fff; opacity: 0; animation: loader-in .3s .4s forwards; transition: visibility .4s; }
+    #loader.done { animation: none; opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s; }
+    @keyframes loader-in { to { opacity: 1; } }
+    .tetris { position: relative; width: 48px; height: 48px; }
+    .tetris i { position: absolute; width: 12px; height: 12px; background: #000; border-radius: 2px; opacity: 0; }
+    .tetris .t1 { left: 0;    top: 24px; box-shadow: 12px 0 #000, 0 12px #000, 12px 12px #000; animation: drop1 2.6s infinite; }
+    .tetris .t2 { left: 36px; top: 12px; box-shadow: 0 12px #000, 0 24px #000, -12px 24px #000; animation: drop2 2.6s infinite; }
+    .tetris .t3 { left: 0;    top: 12px; box-shadow: 12px 0 #000, 24px 0 #000, 24px 12px #000; animation: drop3 2.6s infinite; }
+    @keyframes drop1 { 0% { opacity: 0; transform: translateY(-48px); } 8% { opacity: 1; } 18%, 82% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; transform: none; } }
+    @keyframes drop2 { 0%, 18% { opacity: 0; transform: translateY(-48px); } 26% { opacity: 1; } 36%, 82% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; transform: none; } }
+    @keyframes drop3 { 0%, 36% { opacity: 0; transform: translateY(-48px); } 44% { opacity: 1; } 54%, 82% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .tetris i { animation: none; opacity: 1; } }
+  </style>
 </head>
 <body>
-  <div id="app"><p class="boot">Loading…</p></div>
-  <div id="toast" role="status" aria-live="polite"></div>
-  <script src="projects-io.js"></script>
-  <script src="gh.js"></script>
-  <script src="app.js"></script>
+  <div id="loader" role="status" aria-label="Loading"><div class="tetris"><i class="t1"></i><i class="t2"></i><i class="t3"></i></div></div>
+  <noscript><style>#loader { display: none; }</style></noscript>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="#top"><img class="brand-logo" id="brand-logo" alt=""></a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg class="menu-icon" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path class="mi-top" d="M4 7h16"/><path class="mi-mid" d="M4 12h16"/><path class="mi-bot" d="M4 17h16"/>
+        </svg>
+      </button>
+      <nav class="nav" id="nav">
+        <a href="#about">About</a>
+        <a href="#school">School Projects</a>
+        <a href="#personal">Personal Projects</a>
+        <a href="#contact" class="nav-cta" id="nav-cta">Contact <span class="nav-arrow" aria-hidden="true">→</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <noscript>
+      <p class="noscript-note">Neil Ramnarine – 3D printing technology student at Xenter YH, previously an electrical power engineer. This page needs JavaScript to show projects, the CV and the contact form. LinkedIn: <a href="https://www.linkedin.com/in/neilvj">linkedin.com/in/neilvj</a></p>
+    </noscript>
+    <section class="hero">
+      <div class="hero-grid" id="hero-grid" aria-hidden="true"></div>
+      <svg class="hero-bgword" id="bgword" aria-hidden="true"></svg>
+      <div class="hd-wrap" id="hotend" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <h1 class="hero-hello" id="hello"></h1>
+          <p class="hero-role" id="role"></p>
+          <p class="hero-sub" id="subtitle"></p>
+          <div class="stats" id="stats"></div>
+          <div class="hero-hotend" id="hero-hotend" aria-hidden="true"></div>
+        </div>
+        <div class="hero-image" id="hero-image"></div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow" id="about-eyebrow">About</span>
+          <h2 id="about-title">About me</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-left">
+            <div class="about-photo" id="about-photo"></div>
+            <div class="about-text" id="about-text"></div>
+          </div>
+          <div id="timelines"></div>
+        </div>
+        <div class="about-banner" id="about-banner"></div>
+        <div class="lang-switch" role="group" aria-label="Language of the About me and intern sections">
+          <button type="button" class="lang-btn" data-lang="sv" lang="sv" aria-label="Svenska" aria-pressed="false">SV</button>
+          <button type="button" class="lang-btn" data-lang="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--soft" id="school">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Xenter YH</span>
+          <h2>School Projects</h2>
+          <p>Course work and experiments.</p>
+        </div>
+        <div id="school-grid"></div>
+      </div>
+    </section>
+
+    <section class="section" id="personal">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">On my own time</span>
+          <h2>Personal Projects</h2>
+          <p>Things I design and print for myself.</p>
+        </div>
+        <div id="personal-grid"></div>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="container">
+        <h2 id="band-title"></h2>
+        <p class="band-lead" id="band-lead"></p>
+        <ul class="band-points" id="band-points"></ul>
+        <p class="band-closing" id="band-closing"></p>
+        <div class="lang-switch lang-switch--dark" role="group" aria-label="Language of the About me and intern sections">
+          <button type="button" class="lang-btn" data-lang="sv" lang="sv" aria-label="Svenska" aria-pressed="false">SV</button>
+          <button type="button" class="lang-btn" data-lang="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Contact</span>
+          <h2>Let's talk</h2>
+        </div>
+        <div class="contact-list" id="contact-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container" id="footer-text"></div>
+  </footer>
+
+  <script>
+    (function () {
+      var l = document.getElementById("loader"), done = false;
+      function hide() { if (done || !l) return; done = true; l.classList.add("done"); setTimeout(function () { l.remove(); }, 600); }
+      if (document.readyState === "complete") hide(); else window.addEventListener("load", hide);
+      setTimeout(hide, 10000);
+    })();
+  </script>
+  <script src="js/config.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

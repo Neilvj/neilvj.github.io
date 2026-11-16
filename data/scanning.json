@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Perisphinctes fossil",
+    "text": "Scanned and compiled with RealityScan and Blender. Click to rotate and zoom.",
+    "tags": [
+      "Scan",
+      "RealityScan",
+      "Blender"
+    ],
+    "image": "",
+    "gallery": [],
+    "model": "Perisphinctes.glb",
+    "video": "",
+    "camera": "Sony Xperia 1 VII"
+  },
+  {
+    "title": "Painted sculpture",
+    "text": "Photogrammetry scan from 128 photos, compiled with RealityScan and Blender. Click to rotate and zoom.",
+    "tags": [
+      "Scan",
+      "RealityScan",
+      "Blender"
+    ],
+    "image": "painted-sculpture.jpg",
+    "gallery": [],
+    "model": "Statue_large.glb",
+    "video": "",
+    "camera": "Nikon D7200 + Nikkor 17-55mm DX"
+  }
+]
