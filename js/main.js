@@ -12,6 +12,14 @@
 
 const $ = (sel) => document.querySelector(sel);
 
+/* Visitor statistics: counts a click as an "event" in GoatCounter (the script is loaded at the bottom of index.html).
+   Does nothing if the statistics script is blocked or has not loaded. */
+function track(name, title) {
+  try {
+    if (window.goatcounter && typeof window.goatcounter.count === "function") window.goatcounter.count({ path: name, title: title || name, event: true });
+  } catch (err) { /* statistics must never break the page */ }
+}
+
 function esc(s) {
   return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 }
@@ -467,6 +475,7 @@ function openViewer(card) {
       : `<video src="${video}" ${image ? `poster="${image}"` : ""} controls autoplay loop playsinline></video>`;
     boxCap.textContent = model ? `${title} – drag to rotate, scroll or pinch to zoom` : title;
   }
+  track("project: " + title, "Opened project: " + title);
   lastFocus = card;
   box.classList.add("open");
   document.body.style.overflow = "hidden";
@@ -532,6 +541,8 @@ $("#contact-list").addEventListener("pointerdown", (e) => {
 $("#contact-list").addEventListener("click", (e) => {
   const a = e.target.closest("a.btn--line");
   if (!a || a.dataset.go) return;
+  if (a.hasAttribute("download")) track("cv-download", "Downloaded the CV");
+  else { const name = a.textContent.replace("↗", "").trim(); track("contact: " + name, "Clicked contact button: " + name); }
   e.preventDefault();
   if (!a.querySelector(".ripple")) {
     const r = a.getBoundingClientRect(), size = Math.max(r.width, r.height) * 2;
@@ -618,6 +629,7 @@ function openGmail(body) {
 // Always ONE popup: with a form key it is our own message form,
 // without one it is a Gmail compose window with your address already filled in.
 function startContact() {
+  track("message-opened", "Opened the message form");
   if (SITE.contact.formKey) openContact();
   else openGmail("");
 }
@@ -672,6 +684,7 @@ cForm.addEventListener("submit", async (e) => {
       const j = await r.json();
       if (!j.success) throw new Error(j.message || "failed");
       cStatus.textContent = "Thanks! Your message was sent.";
+      track("message-sent", "Sent a message");
       cForm.reset();
       setTimeout(closeContact, 2200);
     } catch (err) {

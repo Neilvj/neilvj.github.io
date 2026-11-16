@@ -47,6 +47,14 @@ All project images show in black and white until clicked. This is set by `--card
 
 Use the admin app (Site tab, Logo and CV). By hand: put the new PDF in `documents/` and keep the file name `Neil-Ramnarine-CV.pdf`, or change `cv` in `js/config.js`.
 
+## Visitor statistics
+
+The site counts visits with GoatCounter (no cookies, so no consent banner). The numbers are at `https://neilvj.goatcounter.com`. The script is at the bottom of `index.html`; the admin app is not counted.
+
+Besides visits it counts these clicks as events: `cv-download`, `message-opened`, `message-sent`, `contact: <button>` and `project: <title>`.
+
+To see whether a company opened your link, give each one its own address, for example `https://neilvj.github.io/?ref=companyname`. That visit shows up with `companyname` as the referrer.
+
 ## Contact form
 
 The message popup sends through Web3Forms. The access key is `formKey` in `js/config.js`. It is a public key by design and only allows sending to the email address it was registered with.

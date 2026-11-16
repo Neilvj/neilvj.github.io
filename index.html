@@ -161,5 +161,18 @@
   <script src="data/site.js"></script>
   <script src="js/projects.js"></script>
   <script src="js/main.js"></script>
+
+  <!-- Visitor statistics: GoatCounter (no cookies, no personal data). See the numbers at https://neilvj.goatcounter.com
+       A link like https://neilvj.github.io/?ref=companyname is counted as a visit from "companyname". -->
+  <script>
+    (function () {
+      var ref = "";
+      try { ref = (new URLSearchParams(location.search).get("ref") || "").slice(0, 60); } catch (e) {}
+      window.goatcounter = { path: location.pathname };
+      if (ref) window.goatcounter.referrer = ref;
+    })();
+  </script>
+  <script data-goatcounter="https://neilvj.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
